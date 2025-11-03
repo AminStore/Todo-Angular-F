@@ -9,8 +9,7 @@ export const routes: Routes = [
         .then(m => m.TodoPageComponent)
   },
   {
-    path: '**',
-    redirectTo: ''
+    path: '**', redirectTo: ''
   }
 ];
 

@@ -1,6 +1,6 @@
 // src/app/features/todo/store/todo.actions.ts
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Todo, CreateTodoDto, UpdateTodoDto } from '../models/todo.model';
+import { Todo, CreateTodoDto, UpdateTodoDto } from '../../../core/models/todo.model';
 
 export const TodoActions = createActionGroup({
   source: 'Todo',

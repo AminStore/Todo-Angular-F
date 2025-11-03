@@ -1,7 +1,7 @@
 // src/app/features/todo/store/todo.reducer.ts
 import { createReducer, on } from '@ngrx/store';
 import { TodoActions } from './todo.actions';
-import { Todo } from '../models/todo.model';
+import { Todo } from '../../../core/models/todo.model';
 
 export interface TodoState {
   todos: Todo[];

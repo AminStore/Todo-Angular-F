@@ -1,0 +1,81 @@
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="app-header" role="banner">
+    <div class="container header__inner">
+        <a class="brand" routerLink="/" aria-label="{{ title }} home">
+            <h1 class="brand__title">{{ title }}</h1>
+        </a>
+
+        <button
+            class="menu-toggle"
+            type="button"
+            aria-controls="primary-navigation"
+            [attr.aria-expanded]="isMenuOpen"
+            (click)="isMenuOpen = !isMenuOpen"
+            aria-label="Toggle navigation"
+        >
+            <span class="visually-hidden">Menu</span>
+            <!-- simple icon lines -->
+            <svg width="24" height="24" aria-hidden="true" focusable="false">
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+
+        <nav
+            id="primary-navigation"
+            class="primary-nav"
+            [class.primary-nav--open]="isMenuOpen"
+            role="navigation"
+            aria-label="Main navigation"
+        >
+            <ul class="primary-nav__list">
+                <li>
+                    <a
+                        routerLink="/"
+                        #homeRla="routerLinkActive"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        [attr.aria-current]="homeRla.isActive ? 'page' : null"
+                    >Home</a>
+                </li>
+                <li>
+                    <a
+                        routerLink="/about"
+                        #aboutRla="routerLinkActive"
+                        routerLinkActive="active"
+                        [attr.aria-current]="aboutRla.isActive ? 'page' : null"
+                    >About</a>
+                </li>
+                <li>
+                    <a
+                        routerLink="/contact"
+                        #contactRla="routerLinkActive"
+                        routerLinkActive="active"
+                        [attr.aria-current]="contactRla.isActive ? 'page' : null"
+                    >Contact</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main id="main" class="app-main container" role="main">
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__inner">
+            <h2 id="hero-title">Welcome</h2>
+            <p>Start building your Angular application.</p>
+        </div>
+    </section>
+
+    <!-- Routed views render here -->
+    <router-outlet></router-outlet>
+    <div class="loading-overlay" *ngIf="loading$ | async">
+        <mat-spinner></mat-spinner>
+    </div>
+</main>
+
+<footer class="app-footer" role="contentinfo">
+    <div class="container footer__inner">
+        <small>© {{ (new Date()).getFullYear() }} {{ title }}</small>
+    </div>
+</footer>

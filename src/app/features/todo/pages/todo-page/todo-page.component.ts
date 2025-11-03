@@ -1,10 +1,11 @@
 // src/app/features/todo/pages/todo-page/todo-page.component.ts
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../../shared/material/material.module';
 import { TodoListComponent } from '../../components/todo-list/todo-list.component';
 import { TodoFacade } from '../../../../core/services/todo.facade';
+import { Todo } from '../../../../core/models/todo.model';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -87,8 +88,8 @@ import { TranslateModule } from '@ngx-translate/core';
       </div>
 
       <app-todo-list
-        [todos]="filteredTodos$ | async"
-        [loading]="loading$ | async"
+        [todos]="filteredTodos()"
+        [loading]="(loading$ | async) ?? false"
         (todoToggle)="toggleTodo($event)"
         (todoDelete)="deleteTodo($event)" />
     </div>
@@ -182,7 +183,18 @@ export class TodoPageComponent implements OnInit {
 
   filter = signal<'all' | 'active' | 'completed'>('all');
 
-  filteredTodos$ = signal([]);
+  private todos = signal<Todo[]>([]);
+  filteredTodos = computed(() => {
+    const todos = this.todos();
+    switch (this.filter()) {
+      case 'active':
+        return todos.filter(t => !t.completed);
+      case 'completed':
+        return todos.filter(t => t.completed);
+      default:
+        return todos;
+    }
+  });
 
   todoForm = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]]
@@ -191,30 +203,14 @@ export class TodoPageComponent implements OnInit {
   ngOnInit(): void {
     this.facade.loadTodos();
 
-    // Subscribe to todos and filter
+    // Subscribe to todos
     this.todos$.subscribe(todos => {
-      this.updateFilteredTodos(todos);
+      this.todos.set(todos);
     });
-  }
-
-  private updateFilteredTodos(todos: any[]): void {
-    let filtered = todos;
-
-    switch (this.filter()) {
-      case 'active':
-        filtered = todos.filter(t => !t.completed);
-        break;
-      case 'completed':
-        filtered = todos.filter(t => t.completed);
-        break;
-    }
-
-    this.filteredTodos$.set(filtered);
   }
 
   setFilter(filter: 'all' | 'active' | 'completed'): void {
     this.filter.set(filter);
-    this.todos$.subscribe(todos => this.updateFilteredTodos(todos));
   }
 
   addTodo(): void {

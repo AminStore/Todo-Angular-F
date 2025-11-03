@@ -10,7 +10,7 @@ import { Todo, CreateTodoDto, UpdateTodoDto } from '../models/todo.model';
 })
 export class TodoService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/todos`;
+  private apiUrl = `${environment.apiBaseUrl}/todos`;
 
   getTodos(): Observable<Todo[]> {
     return this.http.get<Todo[]>(this.apiUrl);

@@ -38,6 +38,7 @@
     "@ngrx/store-devtools": "^20.1.0",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
     "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",
