@@ -1,6 +1,16 @@
 {
-  "TITLE": "Todo List",
-  "ADD_TODO": "Add Task",
+  "APP_TITLE": "Todo Application",
+  "TOGGLE_THEME": "Toggle Theme",
+  "COPYRIGHT": "All rights reserved",
+  "TODO_LIST": "My Todos",
+  "NO_TODOS": "No todos yet. Add one to get started!",
+  "ADD_TODO": "Add Todo",
+  "ADD_TODO_PLACEHOLDER": "What needs to be done?",
+  "TITLE_REQUIRED": "Title is required",
+  "TITLE_MIN_LENGTH": "Title must be at least 3 characters",
   "DELETE": "Delete",
-  "NO_TASKS": "No tasks available"
+  "TOTAL": "Total",
+  "ACTIVE": "Active",
+  "COMPLETED": "Completed",
+  "ALL": "All"
 }

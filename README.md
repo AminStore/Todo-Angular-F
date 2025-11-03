@@ -1,59 +1,134 @@
-# App1
+# Angular 20 Todo Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.3.
+A full-featured Todo application built with Angular 20, Material Design, NgRx, and i18n support.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- ✅ **CRUD Operations**: Create, read, update, and delete todos
+- 🎨 **Material Design**: Clean and modern UI with Angular Material
+- 🌓 **Dark/Light Theme**: Toggle between themes with persistent storage
+- 🌍 **Internationalization**: English and Arabic language support with RTL
+- 📊 **State Management**: NgRx for predictable state management
+- 🔄 **Reactive Programming**: RxJS for handling async operations
+- 📱 **Responsive Design**: Works on all screen sizes
+- ⚡ **Signals**: Modern Angular signals for reactive state
+- 🎯 **Standalone Components**: Leveraging Angular's latest architecture
 
-```bash
-ng serve
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── core/                  # App-wide singletons
+│   │   ├── services/          # Todo, Theme, Language services
+│   │   ├── interceptors/      # HTTP error and loading interceptors
+│   │   └── models/            # API response models
+│   ├── features/              # Feature modules
+│   │   └── todo/
+│   │       ├── components/    # Todo item and list
+│   │       ├── pages/         # Todo page container
+│   │       ├── store/         # NgRx state management
+│   │       ├── models/        # Todo models
+│   │       └── services/      # Todo facade
+│   ├── shared/                # Reusable components
+│   │   ├── components/        # Header, Footer, Language Switcher
+│   │   └── material/          # Material module
+│   └── assets/
+│       └── i18n/              # Translation files
+└── environments/              # Environment configurations
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Installation
 
-## Code scaffolding
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+2. **Create the database file:**
+   Create a file named `db.json` in the project root with the provided JSON content.
 
-```bash
-ng generate component component-name
-```
+3. **Start the JSON Server:**
+   ```bash
+   npx json-server db.json --port 3000
+   ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+4. **Start the Angular application:**
+   ```bash
+   npm start
+   ```
 
-```bash
-ng generate --help
-```
+5. **Open your browser:**
+   Navigate to `http://localhost:4200`
 
-## Building
+## NPM Scripts
 
-To build the project run:
+- `npm start` - Start development server
+- `npm run build` - Build for production
+- `npm test` - Run unit tests
+- `npm run watch` - Build in watch mode
 
-```bash
-ng build
-```
+## JSON Server
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The application uses JSON Server as a fake REST API. It should run on port 3000.
 
-## Running unit tests
+**Endpoints:**
+- `GET /todos` - Get all todos
+- `GET /todos/:id` - Get single todo
+- `POST /todos` - Create new todo
+- `PATCH /todos/:id` - Update todo
+- `DELETE /todos/:id` - Delete todo
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Features in Detail
 
-```bash
-ng test
-```
+### State Management (NgRx)
+- Actions for all CRUD operations
+- Effects for handling side effects
+- Selectors for derived state
+- Facade pattern for clean component integration
 
-## Running end-to-end tests
+### Theming
+- Light and dark themes
+- Persistent theme selection
+- Smooth transitions
 
-For end-to-end (e2e) testing, run:
+### Internationalization
+- English and Arabic translations
+- RTL support for Arabic
+- Language switcher component
+- Persistent language selection
 
-```bash
-ng e2e
-```
+### Components
+- **Header**: App title, language switcher, theme toggle
+- **Footer**: Copyright information
+- **Todo Page**: Main container with stats and filters
+- **Todo List**: Display todos with loading states
+- **Todo Item**: Individual todo with toggle and delete
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Technologies
 
-## Additional Resources
+- **Angular**: 20.3.0
+- **Angular Material**: 20.2.11
+- **NgRx**: 20.1.0
+- **ngx-translate**: 17.0.0
+- **RxJS**: 7.8.0
+- **TypeScript**: 5.9.2
+- **JSON Server**: 1.0.0-beta.3
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## Development Tips
+
+1. **Adding new translations**: Edit `src/assets/i18n/en.json` and `ar.json`
+2. **Modifying theme colors**: Update `src/styles.scss` Material palettes
+3. **Adding new features**: Follow the feature module pattern in `src/app/features`
+4. **HTTP interceptors**: Add new interceptors in `src/app/core/interceptors`
+
+## License
+
+MIT License. See `LICENSE` file for details.

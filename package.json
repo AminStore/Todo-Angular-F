@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "api": "node server.js",
+    "api:stop": "kill $(lsof -t -i :3000)"
   },
   "prettier": {
     "printWidth": 100,

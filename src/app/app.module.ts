@@ -3,10 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { App } from './app';
+import {  AppComponent } from './app.component';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+// Configuration constants for i18n
+const I18N_CONFIG = {
+  assetsPath: './assets/i18n/',
+  fileExtension: '.json'
+};
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  if (!http) {
+    throw new Error('HttpClient is required for HttpLoaderFactory');
+  }
+  return new TranslateHttpLoader(http, I18N_CONFIG.assetsPath, I18N_CONFIG.fileExtension);
 }
 
 @NgModule({
@@ -21,7 +30,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [App],
-  bootstrap: [App]
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

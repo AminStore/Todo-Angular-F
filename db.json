@@ -1,0 +1,95 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Mostafa Mohamed",
+      "email": "mostafa@company.com",
+      "password": "123456",
+      "language": "en",
+      "role": "Admin",
+      "preferences": { "theme": "dark", "notifications": true }
+    },
+    {
+      "id": 2,
+      "name": "Sara Ali",
+      "email": "sara@company.com",
+      "password": "123456",
+      "language": "ar",
+      "role": "User",
+      "preferences": { "theme": "light", "notifications": true }
+    }
+  ],
+
+  "projects": [
+    {
+      "id": 1,
+      "name": "Enterprise Angular Upgrade",
+      "description": "Migration to Angular 20 + .NET 9 APIs",
+      "ownerId": 1,
+      "createdAt": "2025-10-01T08:00:00Z",
+      "updatedAt": "2025-10-02T12:00:00Z"
+    }
+  ],
+
+  "categories": [
+    { "id": 1, "name": "Frontend", "color": "#00bcd4" },
+    { "id": 2, "name": "Backend", "color": "#4caf50" },
+    { "id": 3, "name": "DevOps", "color": "#ff9800" }
+  ],
+
+  "todos": [
+    {
+      "id": 1,
+      "title": "Setup Angular project structure",
+      "description": "Create clean architecture layout for app.",
+      "completed": false,
+      "priority": "High",
+      "dueDate": "2025-11-10T00:00:00Z",
+      "categoryId": 1,
+      "userId": 1,
+      "projectId": 1,
+      "createdAt": "2025-10-10T10:00:00Z",
+      "updatedAt": "2025-10-10T10:00:00Z"
+    }
+  ],
+
+  "comments": [
+    {
+      "id": 1,
+      "todoId": 1,
+      "userId": 2,
+      "text": "Don’t forget to configure prettier and eslint too.",
+      "createdAt": "2025-10-11T08:00:00Z"
+    }
+  ],
+
+  "attachments": [
+    {
+      "id": 1,
+      "todoId": 1,
+      "fileName": "architecture-diagram.png",
+      "url": "/uploads/architecture-diagram.png",
+      "uploadedAt": "2025-10-11T09:30:00Z"
+    }
+  ],
+
+  "activityLogs": [
+    {
+      "id": 1,
+      "action": "Todo Created",
+      "userId": 1,
+      "todoId": 1,
+      "timestamp": "2025-10-10T10:00:00Z"
+    }
+  ],
+
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 2,
+      "message": "New task assigned to you: 'Setup Angular project structure'",
+      "read": false,
+      "createdAt": "2025-10-11T09:00:00Z"
+    }
+  ]
+}
