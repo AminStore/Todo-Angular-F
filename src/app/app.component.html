@@ -60,13 +60,6 @@
 </header>
 
 <main id="main" class="app-main container" role="main">
-    <section class="hero" aria-labelledby="hero-title">
-        <div class="hero__inner">
-            <h2 id="hero-title">Welcome</h2>
-            <p>Start building your Angular application.</p>
-        </div>
-    </section>
-
     <!-- Routed views render here -->
     <router-outlet></router-outlet>
     <div class="loading-overlay" *ngIf="loading$ | async">

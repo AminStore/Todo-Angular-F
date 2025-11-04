@@ -24,15 +24,15 @@ import { MaterialModule } from './shared/material/material.module';
   template: `
     <div class="app-container" [attr.data-theme]="theme()" [dir]="textDirection()">
       <app-header></app-header>
-      
+
       <main class="content">
         <div *ngIf="isLoading" class="loading-overlay">
           <mat-spinner></mat-spinner>
         </div>
-        
+
         <router-outlet></router-outlet>
       </main>
-      
+
       <app-footer></app-footer>
     </div>
   `,
@@ -69,3 +69,4 @@ export class AppComponent implements OnInit {
       });
   }
 }
+

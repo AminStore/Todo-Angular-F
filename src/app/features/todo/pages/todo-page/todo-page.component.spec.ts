@@ -71,8 +71,24 @@ describe('TodoPageComponent', () => {
   it('should set filter and compute filteredTodos for completed', () => {
     fixture.detectChanges();
     const todos: Todo[] = [
-      { id: 1, title: 'a', completed: false },
-      { id: 2, title: 'b', completed: true },
+      {
+        id: 1, title: 'a', completed: false,
+        priority: 'Low',
+        dueDate: '',
+        categoryId: 0,
+        userId: 0,
+        createdAt: '',
+        updatedAt: ''
+      },
+      {
+        id: 2, title: 'b', completed: true,
+        priority: 'Medium',
+        dueDate: '',
+        categoryId: 0,
+        userId: 0,
+        createdAt: '',
+        updatedAt: ''
+      },
     ];
     facade.emitTodos(todos);
     component.setFilter('completed');
