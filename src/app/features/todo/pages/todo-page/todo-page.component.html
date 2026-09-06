@@ -36,13 +36,14 @@
 
       <span class="nav-label nav-label--projects">
         Projects
-        <button type="button" class="tiny-add" aria-label="Add project">+</button>
+        <button type="button" class="tiny-add" aria-label="Add project" (click)="openProjectComposer($event)">+</button>
       </span>
       <button
-        *ngFor="let project of projects"
+        *ngFor="let project of projects()"
         type="button"
         class="project-item"
-        (click)="selectNav(project.name)">
+        [class.project-item--active]="activeProject() === project.name"
+        (click)="selectProject(project)">
         <span class="project-dot" [style.background]="project.color"></span>
         <span>{{ project.name }}</span>
         <span class="project-more" aria-hidden="true">···</span>
@@ -50,7 +51,7 @@
     </nav>
 
     <div class="sidebar-bottom">
-      <button class="sidebar-utility" type="button" (click)="selectNav('Settings')">
+      <button class="sidebar-utility" type="button" (click)="openDialog('settings')">
         <span class="nav-icon settings-icon" aria-hidden="true"></span>
         <span>Settings</span>
       </button>
@@ -85,7 +86,8 @@
       <div class="topbar-actions">
         <label class="search-box">
           <span class="search-icon" aria-hidden="true"></span>
-          <input
+        <input
+            #searchInput
             type="search"
             [value]="searchQuery()"
             (input)="searchQuery.set($any($event.target).value)"
@@ -94,12 +96,12 @@
             autocomplete="off">
           <span class="search-shortcut">⌘ K</span>
         </label>
-        <button type="button" class="topbar-icon notification-button" aria-label="Notifications">
+        <button type="button" class="topbar-icon notification-button" aria-label="Notifications" (click)="openDialog('notifications')">
           <span class="bell-icon" aria-hidden="true"></span>
           <i></i>
         </button>
-        <button type="button" class="topbar-icon" aria-label="Help">?</button>
-        <div class="topbar-avatar">MM</div>
+        <button type="button" class="topbar-icon" aria-label="Help" (click)="openDialog('help')">?</button>
+        <button type="button" class="topbar-avatar" aria-label="Open settings" (click)="openDialog('settings')">MM</button>
       </div>
     </header>
 
@@ -135,13 +137,13 @@
           <div class="focus-orbit orbit-two"></div>
           <div class="focus-topline">
             <span class="focus-pill"><span class="focus-pill-dot"></span> Focus of the week</span>
-            <button type="button" class="card-menu" aria-label="Focus options">···</button>
+             <button type="button" class="card-menu" aria-label="Focus options" (click)="openDialog('help')">···</button>
           </div>
           <div class="focus-content">
             <div class="focus-icon" aria-hidden="true">✦</div>
             <div>
               <span class="focus-label">Current project</span>
-              <h2>Enterprise Angular Upgrade</h2>
+               <h2>{{ activeProject() }}</h2>
               <p>Keep the core experience moving forward, one meaningful task at a time.</p>
             </div>
           </div>
@@ -166,7 +168,7 @@
               <span class="section-overline">Productivity</span>
               <h2>Week at a glance</h2>
             </div>
-            <button type="button" class="icon-button" aria-label="More productivity options">···</button>
+             <button type="button" class="icon-button" aria-label="More productivity options" (click)="openDialog('help')">···</button>
           </div>
           <div class="week-stats">
             <div><strong>{{ completedCount() }}</strong><span>Completed</span></div>
@@ -201,7 +203,7 @@
             <i *ngIf="day.hasTask"></i>
           </button>
         </div>
-        <button type="button" class="outline-button">Open calendar <span aria-hidden="true">→</span></button>
+        <button type="button" class="outline-button" (click)="selectNav('Calendar')">Open calendar <span aria-hidden="true">→</span></button>
       </section>
 
       <section class="tasks-section">
@@ -291,10 +293,112 @@
       <footer class="dashboard-footer">
         <span>Made for focused work</span>
         <span class="footer-links">
-          <button type="button">Keyboard shortcuts</button>
-          <button type="button">Help center</button>
+          <button type="button" (click)="openDialog('help')">Keyboard shortcuts</button>
+          <button type="button" (click)="openDialog('help')">Help center</button>
         </span>
       </footer>
     </div>
   </main>
+</div>
+
+<div class="inline-alert" *ngIf="error$ | async as error" role="alert">
+  <span>{{ error }}</span>
+  <button type="button" (click)="retryLoad()">Retry</button>
+</div>
+
+<div class="dialog-backdrop" *ngIf="showProjectComposer()" (click)="showProjectComposer.set(false)">
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <div>
+        <span class="section-overline">Workspace</span>
+        <h2 id="project-dialog-title">Create a project</h2>
+      </div>
+      <button type="button" class="dialog-close" aria-label="Close" (click)="showProjectComposer.set(false)">×</button>
+    </div>
+    <p class="dialog-copy">Group related work into a focused space for your team.</p>
+    <label class="dialog-field">
+      <span>Project name</span>
+      <input
+        type="text"
+        [value]="projectName()"
+        (input)="projectName.set($any($event.target).value)"
+        (keydown.enter)="createProject()"
+        placeholder="e.g. Mobile launch"
+        autofocus>
+    </label>
+    <div class="dialog-actions">
+      <button type="button" class="secondary-button" (click)="showProjectComposer.set(false)">Cancel</button>
+      <button type="button" class="primary-button" [disabled]="projectName().trim().length < 2" (click)="createProject()">Create project</button>
+    </div>
+  </section>
+</div>
+
+<div class="dialog-backdrop" *ngIf="dialog()" (click)="closeDialog()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <div>
+        <span class="section-overline">Taskly</span>
+        <h2 *ngIf="dialog() === 'notifications'">Notifications</h2>
+        <h2 *ngIf="dialog() === 'help'">Help & shortcuts</h2>
+        <h2 *ngIf="dialog() === 'settings'">Workspace settings</h2>
+      </div>
+      <button type="button" class="dialog-close" aria-label="Close" (click)="closeDialog()">×</button>
+    </div>
+
+    <ng-container *ngIf="dialog() === 'notifications'">
+      <div class="dialog-empty">
+        <div class="empty-icon">✓</div>
+        <h3>You're all caught up</h3>
+        <p>New assignments, comments, and task updates will appear here.</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="dialog() === 'help'">
+      <div class="shortcut-list">
+        <div><span>Focus search</span><kbd>⌘ K</kbd></div>
+        <div><span>Close dialogs</span><kbd>Esc</kbd></div>
+        <div><span>Add a task</span><kbd>Enter</kbd></div>
+      </div>
+      <p class="dialog-copy">Use the search field to find tasks by title or description. Select a workspace area from the sidebar to adjust the task view.</p>
+    </ng-container>
+
+    <ng-container *ngIf="dialog() === 'settings'">
+      <div class="settings-row">
+        <div>
+          <strong>Appearance</strong>
+          <span>Choose how Taskly looks on this device.</span>
+        </div>
+        <button type="button" class="secondary-button settings-action" (click)="toggleTheme()">
+          {{ theme() === 'dark' ? 'Dark mode' : 'Light mode' }}
+        </button>
+      </div>
+      <div class="settings-row">
+        <div>
+          <strong>Language</strong>
+          <span>Current: {{ language() === 'ar' ? 'العربية' : 'English' }}</span>
+        </div>
+        <div class="language-actions">
+          <button type="button" class="secondary-button settings-action" [class.active-setting]="language() === 'en'" (click)="setLanguage('en')">English</button>
+          <button type="button" class="secondary-button settings-action" [class.active-setting]="language() === 'ar'" (click)="setLanguage('ar')">العربية</button>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+</div>
+
+<div class="dialog-backdrop" *ngIf="todoToDelete()" (click)="todoToDelete.set(null)">
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="delete-dialog-title" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <div>
+        <span class="section-overline">Task action</span>
+        <h2 id="delete-dialog-title">Delete this task?</h2>
+      </div>
+      <button type="button" class="dialog-close" aria-label="Close" (click)="todoToDelete.set(null)">×</button>
+    </div>
+    <p class="dialog-copy">“{{ todoToDelete()?.title }}” will be removed from your task list. This cannot be undone.</p>
+    <div class="dialog-actions">
+      <button type="button" class="secondary-button" (click)="todoToDelete.set(null)">Keep task</button>
+      <button type="button" class="danger-button" (click)="confirmDelete()">Delete task</button>
+    </div>
+  </section>
 </div>
