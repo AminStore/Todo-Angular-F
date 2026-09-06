@@ -12,14 +12,14 @@
       </button>
     </div>
 
-    <div class="workspace-switcher">
+    <button class="workspace-switcher" type="button" (click)="openDialog('workspace')">
       <div class="workspace-avatar">M</div>
       <div class="workspace-copy">
         <span class="eyebrow">Workspace</span>
         <strong>Mostafa's team</strong>
       </div>
       <span class="chevron" aria-hidden="true">⌄</span>
-    </div>
+    </button>
 
     <nav class="sidebar-nav" aria-label="Workspace navigation">
       <span class="nav-label">Workspace</span>
@@ -98,10 +98,10 @@
         </label>
         <button type="button" class="topbar-icon notification-button" aria-label="Notifications" (click)="openDialog('notifications')">
           <span class="bell-icon" aria-hidden="true"></span>
-          <i></i>
+          <i *ngIf="unreadNotifications()"></i>
         </button>
         <button type="button" class="topbar-icon" aria-label="Help" (click)="openDialog('help')">?</button>
-        <button type="button" class="topbar-avatar" aria-label="Open settings" (click)="openDialog('settings')">MM</button>
+       <button type="button" class="topbar-avatar" aria-label="Open profile" (click)="openDialog('profile')">MM</button>
       </div>
     </header>
 
@@ -187,7 +187,8 @@
       <section class="calendar-strip">
         <div class="calendar-copy">
           <span class="section-overline">Your schedule</span>
-          <h2>{{ monthName }} <span>{{ year }}</span></h2>
+           <h2>{{ monthName }} <span>{{ year }}</span></h2>
+           <p class="calendar-selection">{{ activeNav() === 'Calendar' ? selectedDateLabel() : 'Select a day to view its tasks' }}</p>
         </div>
         <div class="calendar-days">
           <button
@@ -197,7 +198,7 @@
             [class.calendar-day--selected]="day.selected"
             [class.calendar-day--muted]="day.muted"
             [attr.aria-pressed]="day.selected"
-            (click)="selectDay(day.number)">
+             (click)="selectDay(day.date)">
             <span>{{ day.label }}</span>
             <strong>{{ day.number }}</strong>
             <i *ngIf="day.hasTask"></i>
@@ -206,7 +207,35 @@
         <button type="button" class="outline-button" (click)="selectNav('Calendar')">Open calendar <span aria-hidden="true">→</span></button>
       </section>
 
-      <section class="tasks-section">
+       <section class="analytics-panel" *ngIf="activeNav() === 'Analytics'">
+         <div class="section-heading">
+           <div>
+             <span class="section-overline">Performance</span>
+             <h2>Progress overview</h2>
+           </div>
+           <span class="analytics-period">All tasks</span>
+         </div>
+         <div class="analytics-grid">
+           <div class="analytics-stat">
+             <strong>{{ progress() }}%</strong>
+             <span>Completion rate</span>
+           </div>
+           <div class="analytics-stat">
+             <strong>{{ activeCount() }}</strong>
+             <span>Tasks in progress</span>
+           </div>
+           <div class="analytics-stat">
+             <strong>{{ completedCount() }}</strong>
+             <span>Tasks completed</span>
+           </div>
+         </div>
+         <div class="analytics-progress">
+           <div class="analytics-progress__label"><span>{{ completionLabel() }}</span><strong>{{ progress() }}%</strong></div>
+           <div class="progress-track"><span [style.width.%]="progress()"></span></div>
+         </div>
+       </section>
+
+       <section class="tasks-section">
         <div class="tasks-header">
           <div>
             <span class="section-overline">Task list</span>
@@ -255,28 +284,40 @@
                 <span *ngIf="todo.completed" aria-hidden="true">✓</span>
               </button>
               <div class="task-main">
-                <div class="task-title-line">
-                  <h3>{{ todo.title }}</h3>
-                  <span class="priority" [class]="'priority priority--' + todo.priority.toLowerCase()">{{ todo.priority }}</span>
-                </div>
-                <p>{{ todo.description || 'No description added yet. Keep the details close to the work.' }}</p>
-                <div class="task-meta">
-                  <span class="task-project"><i [style.background]="categoryColor(todo)" aria-hidden="true"></i>{{ todo.category?.name || 'Frontend' }}</span>
-                  <span class="meta-separator">·</span>
-                  <span>Due {{ formatDate(todo.dueDate) }}</span>
-                </div>
+                <ng-container *ngIf="editingTodo()?.id !== todo.id; else editTask">
+                  <div class="task-title-line">
+                    <h3>{{ todo.title }}</h3>
+                    <span class="priority" [class]="'priority priority--' + (todo.priority || 'Medium').toLowerCase()">{{ todo.priority || 'Medium' }}</span>
+                  </div>
+                  <p>{{ todo.description || 'No description added yet. Keep the details close to the work.' }}</p>
+                  <div class="task-meta">
+                    <span class="task-project"><i [style.background]="categoryColor(todo)" aria-hidden="true"></i>{{ todo.category?.name || 'Frontend' }}</span>
+                    <span class="meta-separator">·</span>
+                    <span>Due {{ formatDate(todo.dueDate) }}</span>
+                  </div>
+                </ng-container>
+                <ng-template #editTask>
+                  <div class="task-edit">
+                    <input
+                      type="text"
+                      [value]="editingTitle()"
+                      (input)="editingTitle.set($any($event.target).value)"
+                      (keydown.enter)="saveEditing()"
+                      (keydown.escape)="cancelEditing()"
+                      aria-label="Edit task title">
+                    <button type="button" class="task-edit-action" (click)="saveEditing()" [disabled]="editingTitle().trim().length < 3">Save</button>
+                    <button type="button" class="task-edit-cancel" (click)="cancelEditing()">Cancel</button>
+                  </div>
+                </ng-template>
               </div>
               <div class="task-assignees">
                 <span class="mini-avatar avatar-purple">M</span>
                 <span class="mini-avatar avatar-orange">S</span>
               </div>
-              <button
-                type="button"
-                class="task-menu"
-                (click)="deleteTodo(todo.id)"
-                [attr.aria-label]="'Delete ' + todo.title">
-                ···
-              </button>
+              <div class="task-actions">
+                <button type="button" class="task-edit-button" (click)="startEditing(todo)" [attr.aria-label]="'Edit ' + todo.title">✎</button>
+                <button type="button" class="task-menu" (click)="deleteTodo(todo.id)" [attr.aria-label]="'Delete ' + todo.title">×</button>
+              </div>
             </article>
           </ng-container>
           <ng-template #emptyTasks>
@@ -328,7 +369,9 @@
     </label>
     <div class="dialog-actions">
       <button type="button" class="secondary-button" (click)="showProjectComposer.set(false)">Cancel</button>
-      <button type="button" class="primary-button" [disabled]="projectName().trim().length < 2" (click)="createProject()">Create project</button>
+       <button type="button" class="primary-button" [disabled]="projectName().trim().length < 2 || projectLoading()" (click)="createProject()">
+         {{ projectLoading() ? 'Creating…' : 'Create project' }}
+       </button>
     </div>
   </section>
 </div>
@@ -341,16 +384,29 @@
         <h2 *ngIf="dialog() === 'notifications'">Notifications</h2>
         <h2 *ngIf="dialog() === 'help'">Help & shortcuts</h2>
         <h2 *ngIf="dialog() === 'settings'">Workspace settings</h2>
+        <h2 *ngIf="dialog() === 'profile'">Your profile</h2>
+        <h2 *ngIf="dialog() === 'workspace'">Workspace switcher</h2>
       </div>
       <button type="button" class="dialog-close" aria-label="Close" (click)="closeDialog()">×</button>
     </div>
 
     <ng-container *ngIf="dialog() === 'notifications'">
-      <div class="dialog-empty">
+      <div class="notification-list" *ngIf="notifications().length; else noNotifications">
+        <div class="notification-item" *ngFor="let notification of notifications()">
+          <span class="notification-status" [class.notification-status--read]="notification.read"></span>
+          <div>
+            <strong>{{ notification.message }}</strong>
+            <span>{{ formatDate(notification.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+      <ng-template #noNotifications>
+        <div class="dialog-empty">
         <div class="empty-icon">✓</div>
         <h3>You're all caught up</h3>
         <p>New assignments, comments, and task updates will appear here.</p>
-      </div>
+        </div>
+      </ng-template>
     </ng-container>
 
     <ng-container *ngIf="dialog() === 'help'">
@@ -382,6 +438,26 @@
           <button type="button" class="secondary-button settings-action" [class.active-setting]="language() === 'ar'" (click)="setLanguage('ar')">العربية</button>
         </div>
       </div>
+    </ng-container>
+
+    <ng-container *ngIf="dialog() === 'profile'">
+      <div class="profile-dialog">
+        <div class="profile-avatar profile-avatar--large">MM</div>
+        <div>
+          <strong>Mostafa Mohamed</strong>
+          <span>Product designer</span>
+        </div>
+      </div>
+      <p class="dialog-copy">Your profile is currently local to this workspace. Account management can be connected when authentication is enabled.</p>
+    </ng-container>
+
+    <ng-container *ngIf="dialog() === 'workspace'">
+      <button type="button" class="workspace-option workspace-option--active" (click)="closeDialog()">
+        <span class="workspace-avatar">M</span>
+        <span><strong>Mostafa's team</strong><small>Personal workspace</small></span>
+        <span class="workspace-check">✓</span>
+      </button>
+      <p class="dialog-copy">Workspace switching is ready for additional teams when they are added to your account.</p>
     </ng-container>
   </section>
 </div>

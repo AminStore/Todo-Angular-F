@@ -5,15 +5,15 @@
     "": {
       "name": "app1",
       "dependencies": {
-        "@angular/animations": "^20.3.9",
-        "@angular/cdk": "^20.2.11",
-        "@angular/common": "^20.3.0",
-        "@angular/compiler": "^20.3.0",
-        "@angular/core": "^20.3.0",
-        "@angular/forms": "^20.3.0",
-        "@angular/material": "^20.2.11",
-        "@angular/platform-browser": "^20.3.0",
-        "@angular/router": "^20.3.0",
+        "@angular/animations": "20.3.30",
+        "@angular/cdk": "20.2.14",
+        "@angular/common": "20.3.30",
+        "@angular/compiler": "20.3.30",
+        "@angular/core": "20.3.30",
+        "@angular/forms": "20.3.30",
+        "@angular/material": "20.2.14",
+        "@angular/platform-browser": "20.3.30",
+        "@angular/router": "20.3.30",
         "@ngrx/effects": "^20.1.0",
         "@ngrx/store": "^20.1.0",
         "@ngrx/store-devtools": "^20.1.0",
@@ -30,9 +30,9 @@
         "zone.js": "~0.15.0",
       },
       "devDependencies": {
-        "@angular/build": "^20.3.3",
-        "@angular/cli": "^20.3.3",
-        "@angular/compiler-cli": "^20.3.0",
+        "@angular/build": "20.3.36",
+        "@angular/cli": "20.3.36",
+        "@angular/compiler-cli": "20.3.30",
         "@types/jasmine": "~5.1.0",
         "jasmine-core": "~5.9.0",
         "karma": "~6.4.0",
@@ -98,7 +98,7 @@
 
     "@angular/compiler-cli": ["@angular/compiler-cli@20.3.30", "", { "dependencies": { "@babel/core": "7.29.7", "@jridgewell/sourcemap-codec": "^1.4.14", "chokidar": "^4.0.0", "convert-source-map": "^1.5.1", "reflect-metadata": "^0.2.0", "semver": "^7.0.0", "tslib": "^2.3.0", "yargs": "^18.0.0" }, "peerDependencies": { "@angular/compiler": "20.3.30", "typescript": ">=5.8 <6.0" }, "bin": { "ng-xi18n": "bundles/src/bin/ng_xi18n.js", "ngc": "bundles/src/bin/ngc.js" } }, "sha512-wWxScyHv3LvjEEJwOBiWSs+zRsCFBS90mGdogMmI7k2A8P6uT/zRDf9wDy1fn2kR6wteRJbGjb88eJecSc126g=="],
 
-    "@angular/core": ["@angular/core@20.3.30", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/compiler": "20.3.30", "rxjs": "^6.5.3 || ^7.4.0", "zone.js": "~0.15.0" } }, "sha512-dSjere7z2QkIipxDheRrkz3WwRUMcTrzPYt+P+OB8v/XyUzi2ynjP19LHhEAYzYmcR8J6/S1pe3bsyKKE1HCMg=="],
+    "@angular/core": ["@angular/core@20.3.30", "http://package-firewall.replit.local/npm/@angular/core/-/core-20.3.30.tgz", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/compiler": "20.3.30", "rxjs": "^6.5.3 || ^7.4.0", "zone.js": "~0.15.0" }, "optionalPeers": ["@angular/compiler", "zone.js"] }, "sha512-dSjere7z2QkIipxDheRrkz3WwRUMcTrzPYt+P+OB8v/XyUzi2ynjP19LHhEAYzYmcR8J6/S1pe3bsyKKE1HCMg=="],
 
     "@angular/forms": ["@angular/forms@20.3.30", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/common": "20.3.30", "@angular/core": "20.3.30", "@angular/platform-browser": "20.3.30", "rxjs": "^6.5.3 || ^7.4.0" } }, "sha512-rdpUQf6pJb8b5pZ196BwEggSl0NJYWrO0QpGvwIMYDj5bwayz5nC4elSmgnqc9FAcPlenXam/fj7vaS+w3ioMg=="],
 

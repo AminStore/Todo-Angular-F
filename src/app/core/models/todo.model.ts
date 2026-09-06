@@ -9,6 +9,7 @@ export interface Todo {
   userId: number;
   createdAt: string;
   updatedAt: string;
+  projectId?: number;
   category?: Category;
   user?: User;
 }
@@ -32,6 +33,12 @@ export interface User {
 export interface CreateTodoDto {
   title: string;
   completed?: boolean;
+  description?: string;
+  priority?: Todo['priority'];
+  dueDate?: string;
+  categoryId?: number;
+  userId?: number;
+  projectId?: number;
 }
 
 export interface UpdateTodoDto {

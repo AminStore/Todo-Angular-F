@@ -90,7 +90,7 @@
   .brand-mark span:nth-child(3) { @apply h-[11px] opacity-80; }
 
   .workspace-switcher {
-    @apply mb-7 flex items-center gap-[9px] rounded-[13px] border border-line bg-white/[3.5%] p-2.5;
+    @apply mb-7 flex w-full items-center gap-[9px] rounded-[13px] border border-line bg-white/[3.5%] p-2.5 text-left transition-colors hover:bg-white/[6%];
   }
 
   .workspace-avatar,
@@ -343,6 +343,7 @@
   .calendar-copy { @apply shrink-0; }
   .calendar-copy h2 { @apply text-base; }
   .calendar-copy h2 span { @apply font-sans text-[13px] font-normal text-subtle; }
+  .calendar-selection { @apply mt-1 text-[9px] text-subtle; }
   .calendar-days { @apply flex min-w-0 flex-1 gap-[5px] overflow-x-auto; scrollbar-width: none; }
   .calendar-days::-webkit-scrollbar { display: none; }
   .calendar-day { @apply relative grid min-w-[35px] flex-1 place-items-center gap-1 rounded-[9px] bg-transparent px-[7px] pb-1 pt-[3px] text-subtle; }
@@ -386,6 +387,16 @@
   .task-assignees { @apply flex; }
   .task-assignees .mini-avatar { @apply h-[22px] w-[22px]; }
   .task-menu { @apply px-0 py-[7px] pl-2 text-[15px]; }
+  .task-actions { @apply flex shrink-0 items-center gap-1; }
+  .task-edit-button, .task-menu { @apply grid h-7 w-7 place-items-center rounded-md bg-transparent p-0 text-sm text-subtle transition-colors; }
+  .task-edit-button:hover { @apply bg-purple/[12%] text-purple-light; }
+  .task-menu:hover { @apply bg-[#f87e75]/[12%] text-[#fb9a91]; }
+  .task-edit { @apply flex flex-wrap items-center gap-2; }
+  .task-edit input { @apply min-w-[180px] flex-1 rounded-md border border-purple-light/60 bg-white/[5%] px-2.5 py-2 text-xs text-ink outline-none; }
+  .task-edit-action, .task-edit-cancel { @apply rounded-md px-2.5 py-2 text-[10px] font-semibold; }
+  .task-edit-action { @apply bg-purple text-white; }
+  .task-edit-action:disabled { @apply cursor-not-allowed opacity-40; }
+  .task-edit-cancel { @apply bg-white/[6%] text-muted; }
   .empty-tasks { @apply grid justify-items-center px-5 py-[43px] text-center; }
   .empty-icon { @apply mb-3 grid h-[38px] w-[38px] place-items-center rounded-xl bg-purple/[13%] text-[19px] text-purple-light; }
   .empty-tasks h3 { @apply text-sm; }
@@ -439,6 +450,31 @@
   .settings-action { @apply mt-0 whitespace-nowrap px-3 py-2; }
   .language-actions { @apply flex gap-1; }
   .active-setting { @apply bg-purple text-white; }
+  .notification-list { @apply mt-5 grid gap-2; }
+  .notification-item { @apply flex items-start gap-3 rounded-lg border border-line bg-white/[3%] px-3 py-3; }
+  .notification-item > div { @apply grid min-w-0 gap-1; }
+  .notification-item strong { @apply text-xs font-medium leading-5; }
+  .notification-item span:last-child { @apply text-[10px] text-subtle; }
+  .notification-status { @apply mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#f3a66f]; }
+  .notification-status--read { @apply bg-[#5b5a6b]; }
+  .profile-dialog { @apply mt-5 flex items-center gap-3 rounded-xl border border-line bg-white/[3%] p-4; }
+  .profile-avatar--large { @apply h-11 w-11 rounded-[14px]; }
+  .profile-dialog > div:last-child { @apply grid gap-1; }
+  .profile-dialog span { @apply text-xs text-muted; }
+  .workspace-option { @apply mt-5 flex w-full items-center gap-3 rounded-xl border border-line bg-white/[3%] p-3 text-left text-ink; }
+  .workspace-option:hover { @apply border-purple-light bg-purple/[8%]; }
+  .workspace-option > span:nth-child(2) { @apply grid flex-1 gap-1; }
+  .workspace-option small { @apply text-[10px] text-muted; }
+  .workspace-check { @apply text-purple-light; }
+  .analytics-panel { @apply mb-[30px] rounded-2xl border border-line bg-[#171822] px-[25px] py-6; }
+  .analytics-period { @apply rounded-md bg-white/[5%] px-2.5 py-1.5 text-[10px] text-muted; }
+  .analytics-grid { @apply mt-5 grid grid-cols-3 gap-3; }
+  .analytics-stat { @apply grid gap-1 rounded-xl border border-line bg-white/[2%] p-4; }
+  .analytics-stat strong { @apply font-display text-2xl font-semibold text-purple-light; }
+  .analytics-stat span { @apply text-[10px] text-muted; }
+  .analytics-progress { @apply mt-5; }
+  .analytics-progress__label { @apply mb-2 flex justify-between text-[10px] text-muted; }
+  .analytics-progress__label strong { @apply text-purple-light; }
 }
 
 @media (max-width: 1040px) {
@@ -466,6 +502,7 @@
   .welcome-row { @apply mb-6 flex-col items-start; }
   .welcome-row .primary-button { @apply w-full; }
   .calendar-strip { @apply flex-col items-start p-[18px]; }
+  .analytics-grid { @apply grid-cols-1; }
   .calendar-days { @apply w-full justify-start pb-[3px]; }
   .calendar-day { @apply flex-[1_0_38px]; }
   .outline-button { @apply w-full; }
