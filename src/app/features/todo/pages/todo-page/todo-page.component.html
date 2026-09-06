@@ -1,41 +1,300 @@
-<div class="todo-container">
-    <header class="todo-header">
-        <h1>My Tasks</h1>
-        <div class="add-task-container">
-            <input type="text" placeholder="Add new task..." #newTask class="task-input">
-            <button class="add-btn" (click)="addTask(newTask.value)">
-                <i class="fas fa-plus"></i> Add
-            </button>
+<div class="workspace-shell">
+  <aside class="sidebar" [class.sidebar--open]="isSidebarOpen()">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <span class="brand-name">taskly</span>
+      <button
+        class="mobile-close"
+        type="button"
+        (click)="isSidebarOpen.set(false)"
+        aria-label="Close menu">
+        ×
+      </button>
+    </div>
+
+    <div class="workspace-switcher">
+      <div class="workspace-avatar">M</div>
+      <div class="workspace-copy">
+        <span class="eyebrow">Workspace</span>
+        <strong>Mostafa's team</strong>
+      </div>
+      <span class="chevron" aria-hidden="true">⌄</span>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Workspace navigation">
+      <span class="nav-label">Workspace</span>
+      <button
+        *ngFor="let item of primaryNav"
+        type="button"
+        class="nav-item"
+        [class.nav-item--active]="activeNav() === item.label"
+        (click)="selectNav(item.label)">
+        <span class="nav-icon" [class]="item.icon" aria-hidden="true"></span>
+        <span>{{ item.label }}</span>
+        <span class="nav-count" *ngIf="item.label === 'My tasks'">{{ activeCount() }}</span>
+      </button>
+
+      <span class="nav-label nav-label--projects">
+        Projects
+        <button type="button" class="tiny-add" aria-label="Add project">+</button>
+      </span>
+      <button
+        *ngFor="let project of projects"
+        type="button"
+        class="project-item"
+        (click)="selectNav(project.name)">
+        <span class="project-dot" [style.background]="project.color"></span>
+        <span>{{ project.name }}</span>
+        <span class="project-more" aria-hidden="true">···</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="sidebar-utility" type="button" (click)="selectNav('Settings')">
+        <span class="nav-icon settings-icon" aria-hidden="true"></span>
+        <span>Settings</span>
+      </button>
+      <div class="profile-card">
+        <div class="profile-avatar">MM</div>
+        <div class="profile-copy">
+          <strong>Mostafa Mohamed</strong>
+          <span>Product designer</span>
         </div>
+        <button type="button" class="profile-more" aria-label="Profile options">···</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop" *ngIf="isSidebarOpen()" (click)="isSidebarOpen.set(false)"></div>
+
+  <main class="dashboard">
+    <header class="topbar">
+      <button
+        class="mobile-menu"
+        type="button"
+        (click)="isSidebarOpen.set(true)"
+        aria-label="Open menu"
+        [attr.aria-expanded]="isSidebarOpen()">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="breadcrumb">
+        <span class="muted">Workspace</span>
+        <span class="breadcrumb-separator">/</span>
+        <strong>{{ activeNav() }}</strong>
+      </div>
+      <div class="topbar-actions">
+        <label class="search-box">
+          <span class="search-icon" aria-hidden="true"></span>
+          <input
+            type="search"
+            [value]="searchQuery()"
+            (input)="searchQuery.set($any($event.target).value)"
+            placeholder="Search tasks..."
+            aria-label="Search tasks"
+            autocomplete="off">
+          <span class="search-shortcut">⌘ K</span>
+        </label>
+        <button type="button" class="topbar-icon notification-button" aria-label="Notifications">
+          <span class="bell-icon" aria-hidden="true"></span>
+          <i></i>
+        </button>
+        <button type="button" class="topbar-icon" aria-label="Help">?</button>
+        <div class="topbar-avatar">MM</div>
+      </div>
     </header>
 
-    <div class="todo-filters">
-        <button [class.active]="currentFilter === 'all'" (click)="filterTasks('all')">All</button>
-        <button [class.active]="currentFilter === 'active'" (click)="filterTasks('active')">Active</button>
-        <button [class.active]="currentFilter === 'completed'" (click)="filterTasks('completed')">Completed</button>
-    </div>
-
-    <div class="todo-list">
-        <div *ngFor="let todo of filteredTodos" class="todo-item" [class.completed]="todo.completed">
-            <div class="todo-content">
-                <input type="checkbox" [checked]="todo.completed" (change)="toggleComplete(todo)">
-                <span [class.strike]="todo.completed">{{todo.title}}</span>
-            </div>
-            <div class="todo-actions">
-                <button class="edit-btn" (click)="editTodo(todo)">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="delete-btn" (click)="deleteTodo(todo)">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
+    <div class="dashboard-content">
+      <section class="welcome-row">
+        <div>
+          <div class="date-kicker">{{ todayLabel }}</div>
+          <h1>Good morning, Mostafa <span class="wave" aria-hidden="true">✦</span></h1>
+          <p>Here’s what’s happening with your tasks today.</p>
         </div>
-    </div>
-
-    <footer class="todo-footer" *ngIf="todos.length > 0">
-        <span>{{remainingTasks}} items left</span>
-        <button class="clear-btn" *ngIf="completedTasks > 0" (click)="clearCompleted()">
-            Clear completed
+        <button type="button" class="primary-button" (click)="showComposer.set(!showComposer())">
+          <span class="plus-symbol" aria-hidden="true">+</span>
+          Add new task
         </button>
-    </footer>
+      </section>
+
+      <form
+        *ngIf="showComposer()"
+        class="composer"
+        [formGroup]="todoForm"
+        (ngSubmit)="addTodo()">
+        <div class="composer-input">
+          <span class="composer-check" aria-hidden="true"></span>
+          <input formControlName="title" placeholder="What needs to be done?" autofocus>
+        </div>
+        <span class="composer-hint">Press Enter to add</span>
+        <button type="submit" [disabled]="todoForm.invalid">Add task</button>
+      </form>
+
+      <section class="overview-grid">
+        <article class="focus-card">
+          <div class="focus-orbit orbit-one"></div>
+          <div class="focus-orbit orbit-two"></div>
+          <div class="focus-topline">
+            <span class="focus-pill"><span class="focus-pill-dot"></span> Focus of the week</span>
+            <button type="button" class="card-menu" aria-label="Focus options">···</button>
+          </div>
+          <div class="focus-content">
+            <div class="focus-icon" aria-hidden="true">✦</div>
+            <div>
+              <span class="focus-label">Current project</span>
+              <h2>Enterprise Angular Upgrade</h2>
+              <p>Keep the core experience moving forward, one meaningful task at a time.</p>
+            </div>
+          </div>
+          <div class="focus-progress-row">
+            <div class="progress-track"><span [style.width.%]="progress()"></span></div>
+            <strong>{{ progress() }}%</strong>
+          </div>
+          <div class="focus-footer">
+            <div class="avatar-stack">
+              <span class="mini-avatar avatar-purple">M</span>
+              <span class="mini-avatar avatar-orange">S</span>
+              <span class="mini-avatar avatar-blue">A</span>
+              <span class="avatar-extra">+3</span>
+            </div>
+            <span class="focus-due">Due in 12 days <span aria-hidden="true">→</span></span>
+          </div>
+        </article>
+
+        <article class="week-card">
+          <div class="section-heading">
+            <div>
+              <span class="section-overline">Productivity</span>
+              <h2>Week at a glance</h2>
+            </div>
+            <button type="button" class="icon-button" aria-label="More productivity options">···</button>
+          </div>
+          <div class="week-stats">
+            <div><strong>{{ completedCount() }}</strong><span>Completed</span></div>
+            <div><strong>{{ activeCount() }}</strong><span>In progress</span></div>
+            <div><strong>{{ todos().length }}</strong><span>Total tasks</span></div>
+          </div>
+          <div class="bar-chart" aria-label="Weekly task activity">
+            <div class="bar-group" *ngFor="let day of weekDays" [class.bar-group--today]="day.today">
+              <div class="bar-rail"><span [style.height.%]="day.value"></span></div>
+              <span>{{ day.label }}</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="calendar-strip">
+        <div class="calendar-copy">
+          <span class="section-overline">Your schedule</span>
+          <h2>{{ monthName }} <span>{{ year }}</span></h2>
+        </div>
+        <div class="calendar-days">
+          <button
+            *ngFor="let day of calendarDays"
+            type="button"
+            class="calendar-day"
+            [class.calendar-day--selected]="day.selected"
+            [class.calendar-day--muted]="day.muted"
+            [attr.aria-pressed]="day.selected"
+            (click)="selectDay(day.number)">
+            <span>{{ day.label }}</span>
+            <strong>{{ day.number }}</strong>
+            <i *ngIf="day.hasTask"></i>
+          </button>
+        </div>
+        <button type="button" class="outline-button">Open calendar <span aria-hidden="true">→</span></button>
+      </section>
+
+      <section class="tasks-section">
+        <div class="tasks-header">
+          <div>
+            <span class="section-overline">Task list</span>
+            <h2>{{ activeNav() === 'Overview' ? 'Your tasks' : activeNav() }}</h2>
+          </div>
+          <div class="view-toggle" role="tablist" aria-label="Task filters">
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="filter() === 'all'"
+              [class.active]="filter() === 'all'"
+              (click)="setFilter('all')">
+              All <span>{{ todos().length }}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="filter() === 'active'"
+              [class.active]="filter() === 'active'"
+              (click)="setFilter('active')">
+              In progress <span>{{ activeCount() }}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="filter() === 'completed'"
+              [class.active]="filter() === 'completed'"
+              (click)="setFilter('completed')">
+              Completed <span>{{ completedCount() }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tasks-list">
+          <ng-container *ngIf="filteredTodos().length; else emptyTasks">
+            <article
+              class="task-row"
+              *ngFor="let todo of filteredTodos()"
+              [class.task-row--done]="todo.completed">
+              <button
+                type="button"
+                class="task-check"
+                [class.task-check--done]="todo.completed"
+                (click)="toggleTodo(todo.id)"
+                [attr.aria-label]="todo.completed ? 'Mark task as in progress' : 'Mark task as complete'">
+                <span *ngIf="todo.completed" aria-hidden="true">✓</span>
+              </button>
+              <div class="task-main">
+                <div class="task-title-line">
+                  <h3>{{ todo.title }}</h3>
+                  <span class="priority" [class]="'priority priority--' + todo.priority.toLowerCase()">{{ todo.priority }}</span>
+                </div>
+                <p>{{ todo.description || 'No description added yet. Keep the details close to the work.' }}</p>
+                <div class="task-meta">
+                  <span class="task-project"><i [style.background]="categoryColor(todo)" aria-hidden="true"></i>{{ todo.category?.name || 'Frontend' }}</span>
+                  <span class="meta-separator">·</span>
+                  <span>Due {{ formatDate(todo.dueDate) }}</span>
+                </div>
+              </div>
+              <div class="task-assignees">
+                <span class="mini-avatar avatar-purple">M</span>
+                <span class="mini-avatar avatar-orange">S</span>
+              </div>
+              <button
+                type="button"
+                class="task-menu"
+                (click)="deleteTodo(todo.id)"
+                [attr.aria-label]="'Delete ' + todo.title">
+                ···
+              </button>
+            </article>
+          </ng-container>
+          <ng-template #emptyTasks>
+            <div class="empty-tasks">
+              <div class="empty-icon">✓</div>
+              <h3>{{ searchQuery() ? 'No matching tasks' : 'Nothing here yet' }}</h3>
+              <p>{{ searchQuery() ? 'Try a different search term.' : 'Add your first task to start making progress.' }}</p>
+              <button type="button" class="secondary-button" (click)="showComposer.set(true)">Create a task</button>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <span>Made for focused work</span>
+        <span class="footer-links">
+          <button type="button">Keyboard shortcuts</button>
+          <button type="button">Help center</button>
+        </span>
+      </footer>
+    </div>
+  </main>
 </div>

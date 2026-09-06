@@ -26,7 +26,6 @@ import { MaterialModule } from './shared/material/material.module';
       </main>
     </div>
   `,
-  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
