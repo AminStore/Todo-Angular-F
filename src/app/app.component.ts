@@ -1,12 +1,10 @@
 import { Component, OnInit, inject, CUSTOM_ELEMENTS_SCHEMA, DestroyRef, effect } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LoadingService } from './core/guards/services/loading/loading.service';
 import { LanguageService } from './core/services/language.service';
 import { ThemeService } from './core/services/theme.service';
-import { HeaderComponent } from './shared/components/header/header.component';
-import { FooterComponent } from './shared/components/footer/footer.component';
 import { MaterialModule } from './shared/material/material.module';
 
 @Component({
@@ -15,25 +13,17 @@ import { MaterialModule } from './shared/material/material.module';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
-    RouterModule,
     RouterOutlet,
-    MaterialModule,
-    HeaderComponent,
-    FooterComponent
+    MaterialModule
   ],
   template: `
     <div class="app-container" [attr.data-theme]="theme()" [dir]="textDirection()">
-      <app-header></app-header>
-
       <main class="content">
         <div *ngIf="isLoading" class="loading-overlay">
           <mat-spinner></mat-spinner>
         </div>
-
         <router-outlet></router-outlet>
       </main>
-
-      <app-footer></app-footer>
     </div>
   `,
   styleUrls: ['./app.component.scss']

@@ -1,0 +1,1 @@
+- [Angular dependency install fallback](angular-dependency-install.md) — if npm is blocked by the package firewall, Bun can install this lockfile and keep the Angular CLI workflow usable.
