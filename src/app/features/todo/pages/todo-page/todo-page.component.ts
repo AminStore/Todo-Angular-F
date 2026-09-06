@@ -302,7 +302,6 @@ type TodoView = 'all' | 'active' | 'completed';
       height: 100vh;
       padding: 30px 18px 20px;
       background: #151621;
-      border-right: 1px solid var(--line);
       z-index: 20;
     }
 
@@ -443,7 +442,6 @@ type TodoView = 'all' | 'active' | 'completed';
     .nav-item--active {
       background: linear-gradient(90deg, rgba(117, 104, 246, .19), rgba(117, 104, 246, .04));
       color: #c7c1ff;
-      box-shadow: inset 3px 0 0 var(--purple);
     }
 
     .nav-icon {
