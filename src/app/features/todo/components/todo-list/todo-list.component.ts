@@ -37,41 +37,7 @@ import { TranslateModule } from '@ngx-translate/core';
         }
       </mat-card-content>
     </mat-card>
-  `,
-  styles: [`
-    mat-card {
-      margin: 20px 0;
-    }
-
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      padding: 40px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: rgba(0, 0, 0, 0.54);
-
-      mat-icon {
-        font-size: 64px;
-        width: 64px;
-        height: 64px;
-        margin-bottom: 16px;
-        opacity: 0.3;
-      }
-
-      p {
-        font-size: 18px;
-        margin: 0;
-      }
-    }
-
-    mat-list {
-      padding: 0;
-    }
-  `]
+  `
 })
 export class TodoListComponent {
   todos = input.required<Todo[]>();

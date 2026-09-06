@@ -1,1 +1,2 @@
 - [Angular dependency install fallback](angular-dependency-install.md) — if npm is blocked by the package firewall, Bun can install this lockfile and keep the Angular CLI workflow usable.
+- [Angular Karma CI](angular-karma-ci.md) — Angular test builds need explicit Karma/browser setup; CI installs Chrome because the local wrapper may not capture.

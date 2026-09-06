@@ -22,12 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
         <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
     </mat-toolbar>
-  `,
-  styles: [`
-    .spacer {
-      flex: 1 1 auto;
-    }
-  `]
+  `
 })
 export class HeaderComponent {
   themeService = inject(ThemeService);

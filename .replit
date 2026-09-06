@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+modules = ["nodejs-20", "web", "bun-1.3", "python-base-3.13"]
 
 [nix]
 channel = "stable-25_05"
@@ -7,16 +7,8 @@ channel = "stable-25_05"
 expertMode = true
 
 [workflows]
-runButton = "Project"
+runButton = "Start application"
 
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Start application"
 
 [[workflows.workflow]]
 name = "Start application"
@@ -27,7 +19,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bun x json-server db.json --host 0.0.0.0 --port 3000 & NG_CLI_ANALYTICS=false exec bun x ng serve --host 0.0.0.0 --port 5000"
+args = "bun run dev"
 waitForPort = 5000
 
 [[ports]]

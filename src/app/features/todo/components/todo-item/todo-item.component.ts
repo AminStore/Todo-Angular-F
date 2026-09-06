@@ -28,33 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
         <mat-icon>delete</mat-icon>
       </button>
     </mat-list-item>
-  `,
-  styles: [`
-    mat-list-item {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-      padding: 12px 0;
-    }
-
-    .todo-title {
-      margin-left: 12px;
-      flex: 1;
-      transition: all 0.3s ease;
-    }
-
-    .completed {
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
-
-    .spacer {
-      flex: 1 1 auto;
-    }
-
-    :host-context([dir="rtl"]) .todo-title {
-      margin-left: 0;
-      margin-right: 12px;
-    }
-  `]
+  `
 })
 export class TodoItemComponent {
   todo = input.required<Todo>();

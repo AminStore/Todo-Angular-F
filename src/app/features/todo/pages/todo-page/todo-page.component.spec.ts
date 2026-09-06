@@ -25,6 +25,23 @@ class TodoFacadeStub {
   emitCount(c: { total: number; active: number; completed: number }) { this.countSubject.next(c); }
 }
 
+const createTodo = (
+  id: number,
+  title: string,
+  completed: boolean,
+  priority: Todo['priority'] = 'Low'
+): Todo => ({
+  id,
+  title,
+  completed,
+  priority,
+  dueDate: '2023-01-01',
+  categoryId: 1,
+  userId: 1,
+  createdAt: '2023-01-01',
+  updatedAt: '2023-01-01'
+});
+
 describe('TodoPageComponent', () => {
   let component: TodoPageComponent;
   let fixture: ComponentFixture<TodoPageComponent>;
@@ -46,8 +63,8 @@ describe('TodoPageComponent', () => {
     expect(facade.loadTodos).toHaveBeenCalled();
 
     const todos: Todo[] = [
-      { id: 1, title: 'a', completed: false },
-      { id: 2, title: 'b', completed: true },
+      createTodo(1, 'a', false),
+      createTodo(2, 'b', true),
     ];
     facade.emitTodos(todos);
 
@@ -65,7 +82,9 @@ describe('TodoPageComponent', () => {
     facade.emitTodos(todos);
     component.setFilter('active');
     fixture.detectChanges();
-    expect(component.filteredTodos()).toEqual([{ id: 1, title: 'a', completed: false }]);
+    expect(component.filteredTodos()).toEqual([
+      jasmine.objectContaining({ id: 1, title: 'a', completed: false })
+    ]);
   });
 
   it('should set filter and compute filteredTodos for completed', () => {
@@ -93,7 +112,9 @@ describe('TodoPageComponent', () => {
     facade.emitTodos(todos);
     component.setFilter('completed');
     fixture.detectChanges();
-    expect(component.filteredTodos()).toEqual([{ id: 2, title: 'b', completed: true }]);
+    expect(component.filteredTodos()).toEqual([
+      jasmine.objectContaining({ id: 2, title: 'b', completed: true })
+    ]);
   });
 
   it('should addTodo when form valid and trimmed title not empty, then reset form', () => {
@@ -114,8 +135,8 @@ describe('TodoPageComponent', () => {
   it('should toggleTodo based on current completed state', () => {
     fixture.detectChanges();
     const todos: Todo[] = [
-      { id: 1, title: 'a', completed: false },
-      { id: 2, title: 'b', completed: true },
+      createTodo(1, 'a', false),
+      createTodo(2, 'b', true),
     ];
     facade.emitTodos(todos);
 

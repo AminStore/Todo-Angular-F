@@ -11,15 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
     <footer>
       <p>{{ 'COPYRIGHT' | translate }} © {{ currentYear }}</p>
     </footer>
-  `,
-  styles: [`
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      border-top: 1px solid rgba(0, 0, 0, 0.12);
-    }
-  `]
+  `
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
