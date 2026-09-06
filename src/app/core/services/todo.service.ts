@@ -21,11 +21,16 @@ export class TodoService {
   }
 
   createTodo(todo: CreateTodoDto): Observable<Todo> {
+    const now = new Date().toISOString();
     return this.http.post<Todo>(this.apiUrl, {
       ...todo,
-      completed: todo.completed || false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      completed: todo.completed ?? false,
+      priority: todo.priority ?? 'Medium',
+      dueDate: todo.dueDate ?? now,
+      categoryId: todo.categoryId ?? 1,
+      userId: todo.userId ?? 1,
+      createdAt: now,
+      updatedAt: now
     });
   }
 

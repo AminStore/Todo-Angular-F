@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "bun-1.3", "python-base-3.13"]
+modules = ["nodejs-20", "web", "bun-1.3"]
 
 [nix]
 channel = "stable-25_05"
@@ -29,3 +29,7 @@ externalPort = 3001
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 9876
+externalPort = 3002
