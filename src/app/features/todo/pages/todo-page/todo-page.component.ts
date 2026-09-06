@@ -194,6 +194,7 @@ type TodoView = 'all' | 'active' | 'completed';
                 class="calendar-day"
                 [class.calendar-day--selected]="day.selected"
                 [class.calendar-day--muted]="day.muted"
+                [attr.aria-pressed]="day.selected"
                 (click)="selectDay(day.number)">
                 <span>{{ day.label }}</span>
                 <strong>{{ day.number }}</strong>
@@ -210,9 +211,9 @@ type TodoView = 'all' | 'active' | 'completed';
                 <h2>{{ activeNav() === 'Overview' ? 'Your tasks' : activeNav() }}</h2>
               </div>
               <div class="view-toggle" role="tablist" aria-label="Task filters">
-                <button type="button" [class.active]="filter() === 'all'" (click)="setFilter('all')">All <span>{{ todos().length }}</span></button>
-                <button type="button" [class.active]="filter() === 'active'" (click)="setFilter('active')">In progress <span>{{ activeCount() }}</span></button>
-                <button type="button" [class.active]="filter() === 'completed'" (click)="setFilter('completed')">Completed <span>{{ completedCount() }}</span></button>
+                 <button type="button" role="tab" [attr.aria-selected]="filter() === 'all'" [class.active]="filter() === 'all'" (click)="setFilter('all')">All <span>{{ todos().length }}</span></button>
+                 <button type="button" role="tab" [attr.aria-selected]="filter() === 'active'" [class.active]="filter() === 'active'" (click)="setFilter('active')">In progress <span>{{ activeCount() }}</span></button>
+                 <button type="button" role="tab" [attr.aria-selected]="filter() === 'completed'" [class.active]="filter() === 'completed'" (click)="setFilter('completed')">Completed <span>{{ completedCount() }}</span></button>
               </div>
             </div>
 
@@ -269,6 +270,7 @@ type TodoView = 'all' | 'active' | 'completed';
     :host {
       display: block;
       min-height: 100vh;
+       overflow-x: hidden;
       --ink: #f7f7fb;
       --muted: #9b9caf;
       --subtle: #6c6c7e;
@@ -278,15 +280,25 @@ type TodoView = 'all' | 'active' | 'completed';
       --purple: #7568f6;
       --purple-light: #aaa0ff;
       --green: #70d6a5;
+       --content-gutter: clamp(18px, 4vw, 62px);
+       --card-radius: 17px;
     }
 
     button {
       border: 0;
       cursor: pointer;
+       font: inherit;
+     }
+
+     button:focus-visible,
+     input:focus-visible {
+       outline: 2px solid var(--purple-light);
+       outline-offset: 3px;
     }
 
     .workspace-shell {
       display: flex;
+       width: 100%;
       min-height: 100vh;
       background: #10111a;
       color: var(--ink);
@@ -502,28 +514,34 @@ type TodoView = 'all' | 'active' | 'completed';
     .profile-more { padding: 6px 0 6px 5px; }
     .mobile-close, .mobile-menu, .sidebar-backdrop { display: none; }
 
-    .dashboard { flex: 1; min-width: 0; }
+     .dashboard {
+       flex: 1;
+       min-width: 0;
+       overflow-x: clip;
+     }
 
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       min-height: 82px;
-      padding: 0 clamp(24px, 4vw, 62px);
+       gap: 20px;
+       padding: 0 var(--content-gutter);
       border-bottom: 1px solid var(--line);
     }
 
-    .breadcrumb { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+     .breadcrumb { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 12px; }
     .muted { color: var(--subtle); }
     .breadcrumb-separator { color: #4e4e5e; }
-    .breadcrumb strong { font-weight: 600; }
+     .breadcrumb strong { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 
-    .topbar-actions { display: flex; align-items: center; gap: 13px; }
+     .topbar-actions { display: flex; align-items: center; flex: 0 0 auto; gap: 13px; }
     .search-box {
       display: flex;
       align-items: center;
       gap: 8px;
-      width: min(260px, 24vw);
+       width: clamp(180px, 24vw, 260px);
+       min-width: 0;
       padding: 9px 11px;
       border: 1px solid var(--line);
       border-radius: 10px;
@@ -541,7 +559,11 @@ type TodoView = 'all' | 'active' | 'completed';
     .bell-icon { width: 12px; height: 13px; border: 1.5px solid currentColor; border-radius: 7px 7px 4px 4px; }
     .topbar-avatar { width: 31px; height: 31px; border-radius: 9px; font-size: 9px; }
 
-    .dashboard-content { width: min(1260px, 100%); padding: 43px clamp(24px, 4vw, 62px) 25px; margin: 0 auto; }
+     .dashboard-content {
+       width: min(100%, 1380px);
+       padding: 43px var(--content-gutter) 25px;
+       margin: 0 auto;
+     }
     .welcome-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 31px; }
     .date-kicker { margin-bottom: 9px; color: var(--purple-light); font-size: 11px; font-weight: 600; }
     h1, h2, h3, p { margin: 0; }
@@ -571,8 +593,8 @@ type TodoView = 'all' | 'active' | 'completed';
     .composer > button { padding: 8px 13px; border-radius: 8px; background: var(--purple); color: white; font-size: 11px; font-weight: 600; }
     .composer > button:disabled { cursor: not-allowed; opacity: .45; }
 
-    .overview-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; margin-bottom: 18px; }
-    .focus-card, .week-card, .calendar-strip, .tasks-section { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 17px; background: var(--panel); }
+     .overview-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 18px; margin-bottom: 18px; }
+     .focus-card, .week-card, .calendar-strip, .tasks-section { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--panel); }
     .focus-card { min-height: 268px; padding: 24px 26px 21px; background: radial-gradient(circle at 100% 0%, rgba(132, 120, 255, .24), transparent 46%), linear-gradient(130deg, #26233e, #1b1b2b 68%); }
     .focus-orbit { position: absolute; border: 1px solid rgba(164, 156, 255, .11); border-radius: 50%; pointer-events: none; }
     .orbit-one { width: 240px; height: 240px; right: -40px; top: -88px; }
@@ -605,10 +627,10 @@ type TodoView = 'all' | 'active' | 'completed';
     .section-overline { display: block; margin-bottom: 6px; }
     .section-heading h2, .calendar-copy h2, .tasks-header h2 { font: 600 20px/1.2 'Space Grotesk', sans-serif; letter-spacing: -.6px; }
     .icon-button { padding: 0; font-size: 16px; }
-    .week-stats { display: flex; gap: clamp(16px, 3vw, 35px); margin: 23px 0 20px; }
+     .week-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 23px 0 20px; }
     .week-stats div { display: grid; gap: 3px; }
     .week-stats strong { font: 600 20px/1 'Space Grotesk', sans-serif; }
-    .week-stats span { color: var(--subtle); font-size: 9px; white-space: nowrap; }
+     .week-stats span { overflow: hidden; color: var(--subtle); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
     .bar-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 74px; padding: 0 5px; border-bottom: 1px solid var(--line); }
     .bar-group { display: grid; justify-items: center; gap: 7px; height: 100%; color: var(--subtle); font-size: 9px; }
     .bar-rail { display: flex; align-items: flex-end; height: 54px; }
@@ -616,12 +638,13 @@ type TodoView = 'all' | 'active' | 'completed';
     .bar-group--today .bar-rail span { background: linear-gradient(#bcb6ff, #7165f2); box-shadow: 0 4px 12px rgba(117,104,246,.3); }
     .bar-group--today { color: #c6c0ff; font-weight: 600; }
 
-    .calendar-strip { display: flex; align-items: center; gap: 27px; padding: 18px 22px; margin-bottom: 30px; }
+     .calendar-strip { display: flex; align-items: center; gap: 27px; padding: 18px 22px; margin-bottom: 30px; }
     .calendar-copy { flex: 0 0 auto; }
     .calendar-copy h2 { font-size: 16px; }
     .calendar-copy h2 span { color: var(--subtle); font: 400 13px 'DM Sans', sans-serif; }
-    .calendar-days { display: flex; justify-content: space-around; flex: 1; gap: 5px; }
-    .calendar-day { position: relative; display: grid; place-items: center; gap: 4px; min-width: 35px; padding: 3px 7px 5px; border-radius: 9px; background: transparent; color: var(--subtle); }
+     .calendar-days { display: flex; justify-content: space-around; flex: 1 1 auto; gap: 5px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+     .calendar-days::-webkit-scrollbar { display: none; }
+     .calendar-day { position: relative; display: grid; flex: 1 1 35px; place-items: center; gap: 4px; min-width: 35px; padding: 3px 7px 5px; border-radius: 9px; background: transparent; color: var(--subtle); }
     .calendar-day span { font-size: 9px; text-transform: uppercase; }
     .calendar-day strong { color: #e5e3ee; font: 600 13px 'Space Grotesk', sans-serif; }
     .calendar-day--muted { opacity: .45; }
@@ -633,7 +656,7 @@ type TodoView = 'all' | 'active' | 'completed';
     .outline-button:hover { border-color: rgba(170,160,255,.5); color: var(--ink); }
     .outline-button span { color: var(--purple-light); font-size: 14px; }
 
-    .tasks-section { padding: 25px 25px 8px; background: #171822; }
+     .tasks-section { padding: 25px 25px 8px; background: #171822; }
     .tasks-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
     .view-toggle { display: flex; gap: 4px; padding: 4px; border-radius: 9px; background: #11121b; }
     .view-toggle button { padding: 7px 9px; border-radius: 6px; background: transparent; color: var(--subtle); font-size: 10px; white-space: nowrap; }
@@ -648,14 +671,14 @@ type TodoView = 'all' | 'active' | 'completed';
     .task-check--done { border-color: var(--purple); background: var(--purple); }
     .task-main { flex: 1; min-width: 0; }
     .task-title-line { display: flex; align-items: center; gap: 9px; }
-    .task-title-line h3 { overflow: hidden; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+     .task-title-line h3 { min-width: 0; overflow: hidden; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
     .task-row--done h3 { color: var(--muted); text-decoration: line-through; }
     .task-main p { overflow: hidden; margin-top: 5px; color: var(--subtle); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
     .priority { padding: 4px 7px; border-radius: 5px; font-size: 8px; font-weight: 700; text-transform: uppercase; }
     .priority--high { background: rgba(248, 126, 117, .12); color: #fb9a91; }
     .priority--medium { background: rgba(247, 185, 112, .12); color: #f3bd76; }
     .priority--low { background: rgba(112, 214, 165, .11); color: #75d8a9; }
-    .task-meta { display: flex; align-items: center; gap: 7px; margin-top: 8px; color: #6e6e7f; font-size: 9px; }
+     .task-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 8px; color: #6e6e7f; font-size: 9px; }
     .task-project { display: inline-flex; align-items: center; gap: 5px; color: #8f8da0; }
     .task-project i { width: 6px; height: 6px; border-radius: 2px; }
     .meta-separator { color: #464655; }
@@ -675,7 +698,7 @@ type TodoView = 'all' | 'active' | 'completed';
 
     @media (max-width: 1040px) {
       .sidebar { flex-basis: 220px; width: 220px; }
-      .overview-grid { grid-template-columns: 1fr; }
+       .overview-grid { grid-template-columns: minmax(0, 1fr); }
       .week-card { min-height: 220px; }
       .bar-chart { max-width: 420px; }
       .calendar-strip { gap: 15px; }
@@ -683,7 +706,7 @@ type TodoView = 'all' | 'active' | 'completed';
     }
 
     @media (max-width: 760px) {
-      .sidebar { position: fixed; left: 0; transform: translateX(-100%); transition: transform .25s ease; }
+       .sidebar { position: fixed; left: 0; width: min(280px, 86vw); transform: translateX(-100%); transition: transform .25s ease; }
       .sidebar--open { transform: translateX(0); box-shadow: 18px 0 40px rgba(0,0,0,.28); }
       .sidebar-backdrop { position: fixed; inset: 0; display: block; background: rgba(0,0,0,.55); z-index: 19; }
       .mobile-close { display: block; margin-left: auto; background: transparent; color: var(--muted); font-size: 25px; line-height: 1; }
@@ -698,7 +721,8 @@ type TodoView = 'all' | 'active' | 'completed';
       .welcome-row { align-items: flex-start; flex-direction: column; margin-bottom: 24px; }
       .welcome-row .primary-button { width: 100%; }
       .calendar-strip { align-items: flex-start; flex-direction: column; padding: 18px; }
-      .calendar-days { width: 100%; }
+       .calendar-days { width: 100%; justify-content: flex-start; padding-bottom: 3px; }
+       .calendar-day { flex: 1 0 38px; }
       .outline-button { align-self: stretch; }
       .tasks-section { padding: 20px 15px 5px; }
       .tasks-header { align-items: flex-start; flex-direction: column; }
@@ -711,14 +735,29 @@ type TodoView = 'all' | 'active' | 'completed';
     @media (max-width: 430px) {
       .topbar .topbar-icon:not(.notification-button), .topbar-avatar { display: none; }
       .search-box { margin-left: auto; }
+       .topbar { gap: 8px; padding-right: 14px; padding-left: 14px; }
+       .breadcrumb { overflow: hidden; }
+       .breadcrumb .muted, .breadcrumb-separator { display: none; }
+       .dashboard-content { padding: 26px 14px 18px; }
       .focus-card, .week-card { padding-right: 18px; padding-left: 18px; }
       .focus-content h2 { font-size: 18px; }
-      .calendar-day:nth-child(-n+2), .calendar-day:nth-last-child(-n+2) { display: none; }
       .task-title-line { align-items: flex-start; flex-direction: column; gap: 5px; }
       .task-row { align-items: flex-start; }
       .task-check { margin-top: 2px; }
       .dashboard-footer { align-items: flex-start; flex-direction: column; gap: 12px; }
     }
+
+     @media (max-width: 360px) {
+       .topbar-actions .notification-button { display: none; }
+       .welcome-row h1 { font-size: 25px; }
+       .focus-card, .week-card { padding: 17px 14px; }
+       .focus-content { gap: 10px; }
+       .focus-content h2 { font-size: 17px; }
+       .week-stats { gap: 8px; }
+       .week-stats strong { font-size: 18px; }
+       .tasks-section { padding-right: 11px; padding-left: 11px; }
+       .view-toggle button { font-size: 9px; }
+     }
   `]
 })
 export class TodoPageComponent implements OnInit {
