@@ -66,7 +66,7 @@
   }
 
   .sidebar {
-    @apply sticky top-0 z-20 flex h-screen w-[252px] shrink-0 flex-col bg-[#151621] px-[18px] pb-5 pt-[30px];
+    @apply sticky top-0 z-20 flex h-[100dvh] w-[252px] shrink-0 flex-col overflow-hidden border-r border-white/[3%] bg-[#151621] px-[18px] pb-5 pt-[30px];
   }
 
   .brand {
@@ -121,6 +121,8 @@
   .chevron { @apply text-[17px] text-muted; }
 
   .sidebar-nav { @apply flex flex-col gap-[5px]; }
+  .sidebar-nav { @apply min-h-0 overflow-y-auto pr-1; scrollbar-width: none; }
+  .sidebar-nav::-webkit-scrollbar { display: none; }
 
   .nav-label {
     @apply flex items-center justify-between px-3 pb-[9px];
@@ -135,7 +137,7 @@
   .nav-item,
   .project-item,
   .sidebar-utility {
-    @apply flex w-full items-center gap-[11px] rounded-[10px] bg-transparent px-3 py-2.5 text-left text-[13px] text-muted transition-colors duration-200;
+    @apply flex min-h-10 w-full items-center gap-[11px] rounded-[10px] bg-transparent px-3 py-2.5 text-left text-[13px] text-muted transition-colors duration-200;
   }
 
   .nav-item:hover,
@@ -237,7 +239,7 @@
   .dashboard { @apply min-w-0 flex-1 overflow-x-clip; }
 
   .topbar {
-    @apply flex min-h-[82px] items-center justify-between gap-5 border-b border-line px-[clamp(18px,4vw,62px)];
+    @apply sticky top-0 z-10 flex min-h-[82px] items-center justify-between gap-5 border-b border-line bg-[#10111a]/95 px-[clamp(18px,4vw,62px)] backdrop-blur-md;
   }
 
   .breadcrumb { @apply flex min-w-0 items-center gap-2.5 text-xs; }
@@ -418,7 +420,7 @@
     @apply rounded-md bg-[#f87e75]/15 px-3 py-1.5 font-semibold text-[#ffaaa2];
   }
   .dialog-backdrop {
-    @apply fixed inset-0 z-[80] grid place-items-center bg-black/65 p-5 backdrop-blur-sm;
+    @apply fixed inset-0 z-[80] grid place-items-center overflow-y-auto bg-black/65 p-5 backdrop-blur-sm;
   }
   .dialog {
     @apply w-full max-w-[480px] rounded-2xl border border-line bg-[#1b1b2a] p-6 shadow-[0_22px_70px_rgb(0_0_0_/_45%)];
@@ -478,20 +480,24 @@
 }
 
 @media (max-width: 1040px) {
-  .sidebar { @apply w-[220px]; }
+  .sidebar { @apply w-[224px] px-[14px]; }
+  .brand { @apply px-2 pb-6; }
+  .workspace-switcher { @apply mb-6; }
+  .dashboard-content { @apply px-[clamp(18px,3vw,36px)]; }
   .overview-grid { @apply grid-cols-1; }
   .week-card { @apply min-h-[220px]; }
   .bar-chart { @apply max-w-[420px]; }
   .calendar-strip { @apply gap-[15px]; }
   .calendar-day { @apply min-w-[27px] px-1; }
+  .search-box { @apply w-[clamp(150px,22vw,230px)]; }
 }
 
 @media (max-width: 760px) {
-  .sidebar { @apply fixed left-0 w-[min(280px,86vw)] -translate-x-full transition-transform duration-200; }
+  .sidebar { @apply fixed left-0 w-[min(304px,88vw)] -translate-x-full border-r border-white/[7%] px-[18px] transition-transform duration-200; }
   .sidebar--open { @apply translate-x-0 shadow-[18px_0_40px_rgb(0_0_0_/_28%)]; }
-  .sidebar-backdrop { @apply fixed inset-0 z-[19] block bg-black/55; }
+  .sidebar-backdrop { @apply fixed inset-0 z-[19] block bg-black/60 backdrop-blur-[2px]; }
   .mobile-close { @apply ml-auto block bg-transparent text-[25px] leading-none text-muted; }
-  .mobile-menu { @apply grid h-[33px] w-[33px] gap-[3px] rounded-lg bg-transparent px-2 py-[9px]; }
+  .mobile-menu { @apply grid h-10 w-10 shrink-0 gap-[3px] rounded-lg bg-transparent px-2.5 py-3; }
   .mobile-menu span { @apply block h-px bg-muted; }
   .topbar { @apply min-h-[68px] px-5; }
   .breadcrumb { @apply ml-[5px]; }
@@ -512,6 +518,8 @@
   .view-toggle button { @apply flex-1 px-[5px]; }
   .task-assignees { @apply hidden; }
   .task-menu { @apply pl-[3px]; }
+  .task-row { @apply gap-2.5; }
+  .task-actions { @apply gap-0; }
 }
 
 @media (max-width: 430px) {
@@ -522,6 +530,12 @@
   .breadcrumb .muted, .breadcrumb-separator { @apply hidden; }
   .dashboard-content { @apply px-[14px] pb-[18px] pt-[26px]; }
   .focus-card, .week-card { @apply px-[18px]; }
+  .focus-topline { @apply items-start; }
+  .focus-pill { @apply max-w-[calc(100%-38px)] truncate; }
+  .focus-content { @apply my-5; }
+  .focus-content p { @apply max-w-none; }
+  .focus-footer { @apply items-end gap-3; }
+  .focus-due { @apply text-right; }
   .focus-content h2 { @apply text-lg; }
   .task-title-line { @apply flex-col items-start gap-[5px]; }
   .task-row { @apply items-start; }
@@ -544,6 +558,24 @@
   .week-stats strong { @apply text-lg; }
   .tasks-section { @apply px-[11px]; }
   .view-toggle button { @apply text-[9px]; }
+}
+
+@media (hover: none) {
+  .nav-item:hover,
+  .project-item:hover,
+  .sidebar-utility:hover,
+  .task-row:hover {
+    transform: none;
+    background-color: transparent;
+  }
+}
+
+@layer base {
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible {
+    @apply outline-2 outline-offset-2 outline-purple-light;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
