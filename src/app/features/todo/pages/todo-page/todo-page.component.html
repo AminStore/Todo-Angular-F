@@ -100,7 +100,7 @@
         <strong class="truncate font-semibold">{{ activeNav() }}</strong>
       </div>
       <div class="flex shrink-0 items-center gap-[5px] md:gap-[13px]">
-        <label class="ml-auto flex w-8 items-center gap-2 rounded-[10px] border-0 bg-transparent p-[9px] md:w-[clamp(150px,22vw,230px)] md:border md:border-line md:bg-white/[2.5%] md:px-[11px] md:py-[9px]">
+        <label class="ml-auto flex w-8 items-center gap-2 rounded-[10px] border-0 bg-transparent p-[9px] transition-colors duration-200 focus-within:rounded-[10px] focus-within:border-purple-light/60 focus-within:bg-purple/[5%] focus-within:ring-1 focus-within:ring-purple-light/25 md:w-[clamp(150px,22vw,230px)] md:border md:border-line md:bg-white/[2.5%] md:px-[11px] md:py-[9px]">
           <svg class="h-4 w-4 shrink-0 text-muted" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8.5" cy="8.5" r="4.5"/><path d="m12 12 4 4" stroke-linecap="round"/></svg>
         <input
             #searchInput
@@ -110,7 +110,7 @@
             placeholder="Search tasks..."
             aria-label="Search tasks"
             autocomplete="off"
-            class="hidden w-full min-w-0 border-0 bg-transparent text-[11px] text-ink outline-none placeholder:text-[#6f6f80] md:block">
+            class="hidden w-full min-w-0 border-0 bg-transparent text-[11px] text-ink outline-none placeholder:text-[#6f6f80] focus-visible:outline-none md:block">
           <span class="hidden whitespace-nowrap text-[9px] text-[#6c6c7a] md:inline">⌘ K</span>
         </label>
         <button type="button" class="relative grid h-8 w-8 place-items-center rounded-[9px] bg-transparent font-semibold text-muted hover:bg-white/[6%] hover:text-ink min-[361px]:grid" aria-label="Notifications" (click)="openDialog('notifications')">
