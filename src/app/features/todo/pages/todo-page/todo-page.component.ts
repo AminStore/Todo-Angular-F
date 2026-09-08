@@ -71,10 +71,10 @@ export class TodoPageComponent implements OnInit {
   @ViewChild('searchInput') private searchInput?: ElementRef<HTMLInputElement>;
 
   readonly primaryNav = [
-    { label: 'Overview', icon: 'home-icon' },
-    { label: 'My tasks', icon: 'tasks-icon' },
-    { label: 'Calendar', icon: 'calendar-icon' },
-    { label: 'Analytics', icon: 'chart-icon' }
+    { label: 'Overview', icon: 'overview' },
+    { label: 'My tasks', icon: 'tasks' },
+    { label: 'Calendar', icon: 'calendar' },
+    { label: 'Analytics', icon: 'analytics' }
   ];
 
   readonly weekDays = [

@@ -1,91 +1,107 @@
-<div class="workspace-shell">
-  <aside class="sidebar" [class.sidebar--open]="isSidebarOpen()">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
-      <span class="brand-name">taskly</span>
+<div class="flex min-h-screen w-full bg-[#10111a] text-ink">
+  <aside
+    class="fixed inset-y-0 left-0 z-20 flex h-[100dvh] w-[min(304px,88vw)] -translate-x-full flex-col overflow-hidden border-r border-white/[7%] bg-[#151621] px-[18px] pb-5 pt-[30px] transition-transform duration-200 md:sticky md:top-0 md:w-[252px] md:translate-x-0 md:border-white/[3%] lg:w-[224px] lg:px-[14px]"
+    [class.translate-x-0]="isSidebarOpen()"
+    [class.shadow-[18px_0_40px_rgb(0_0_0_/_28%)]]="isSidebarOpen()">
+    <div class="flex items-center gap-2.5 px-3 pb-6 md:pb-8 lg:px-2">
+      <div class="flex h-[26px] w-[26px] -rotate-12 items-center justify-center gap-0.5 rounded-lg bg-gradient-to-br from-[#a298ff] to-[#6253e9] shadow-[0_6px_18px_rgb(117_104_246_/_30%)]" aria-hidden="true">
+        <span class="h-[9px] w-1 rounded-[3px] bg-white opacity-70"></span>
+        <span class="h-[15px] w-1 rounded-[3px] bg-white"></span>
+        <span class="h-[11px] w-1 rounded-[3px] bg-white opacity-80"></span>
+      </div>
+      <span class="font-display text-[23px] font-bold leading-none tracking-[-.8px]">taskly</span>
       <button
-        class="mobile-close"
+        class="ml-auto block bg-transparent text-[25px] leading-none text-muted md:hidden"
         type="button"
         (click)="isSidebarOpen.set(false)"
         aria-label="Close menu">
-        ×
+        <svg class="mx-auto h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke-linecap="round"/></svg>
       </button>
     </div>
 
-    <button class="workspace-switcher" type="button" (click)="openDialog('workspace')">
-      <div class="workspace-avatar">M</div>
-      <div class="workspace-copy">
-        <span class="eyebrow">Workspace</span>
-        <strong>Mostafa's team</strong>
+    <button class="mb-6 flex min-h-10 w-full items-center gap-[9px] rounded-[13px] border border-line bg-white/[3.5%] p-2.5 text-left transition-colors hover:bg-white/[6%] md:mb-7" type="button" (click)="openDialog('workspace')">
+      <div class="grid h-7 w-7 shrink-0 place-items-center rounded-[10px] bg-gradient-to-br from-[#f09c8d] to-[80%] to-purple text-[11px] font-bold text-white">M</div>
+      <div class="grid min-w-0 flex-1 gap-[3px]">
+        <span class="text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Workspace</span>
+        <strong class="overflow-hidden truncate text-xs font-semibold">Mostafa's team</strong>
       </div>
-      <span class="chevron" aria-hidden="true">⌄</span>
+      <svg class="h-4 w-4 text-muted" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m5 7.5 5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
 
-    <nav class="sidebar-nav" aria-label="Workspace navigation">
-      <span class="nav-label">Workspace</span>
+    <nav class="flex min-h-0 flex-col gap-[5px] overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Workspace navigation">
+      <span class="flex items-center justify-between px-3 pb-[9px] text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Workspace</span>
       <button
         *ngFor="let item of primaryNav"
         type="button"
-        class="nav-item"
-        [class.nav-item--active]="activeNav() === item.label"
+        class="flex min-h-10 w-full items-center gap-[11px] rounded-[10px] bg-transparent px-3 py-2.5 text-left text-[13px] text-muted transition-colors duration-200 hover:bg-white/5 hover:text-ink"
+        [class.bg-gradient-to-r]="activeNav() === item.label"
+        [class.from-purple/[19%]]="activeNav() === item.label"
+        [class.to-purple/[4%]]="activeNav() === item.label"
+        [class.text-[#c7c1ff]]="activeNav() === item.label"
         (click)="selectNav(item.label)">
-        <span class="nav-icon" [class]="item.icon" aria-hidden="true"></span>
+        <span class="grid h-4 w-4 shrink-0 place-items-center text-muted opacity-85" aria-hidden="true" [ngSwitch]="item.icon">
+          <svg *ngSwitchCase="'overview'" class="h-[15px] w-[15px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m10 3 6 5v8.5H4V8l6-5Z" stroke-linejoin="round"/><path d="M8 16.5v-4h4v4" stroke-linejoin="round"/></svg>
+          <svg *ngSwitchCase="'tasks'" class="h-[15px] w-[15px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="13" height="13" rx="3"/><path d="m6.5 10 2.2 2.2 4.8-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg *ngSwitchCase="'calendar'" class="h-[15px] w-[15px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="4.5" width="13" height="12" rx="2"/><path d="M6.5 3v3M13.5 3v3M3.5 8h13" stroke-linecap="round"/></svg>
+          <svg *ngSwitchCase="'analytics'" class="h-[15px] w-[15px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16V9M8 16V5M12 16v-3M16 16V3" stroke-linecap="round"/></svg>
+        </span>
         <span>{{ item.label }}</span>
-        <span class="nav-count" *ngIf="item.label === 'My tasks'">{{ activeCount() }}</span>
+        <span class="ml-auto min-w-5 rounded-full bg-purple/[16%] px-1.5 py-0.5 text-center text-[10px] text-[#aca4ff]" *ngIf="item.label === 'My tasks'">{{ activeCount() }}</span>
       </button>
 
-      <span class="nav-label nav-label--projects">
+      <span class="flex items-center justify-between px-3 pb-[9px] pt-[27px] text-[10px] font-bold uppercase tracking-[.08em] text-subtle">
         Projects
-        <button type="button" class="tiny-add" aria-label="Add project" (click)="openProjectComposer($event)">+</button>
+        <button type="button" class="grid h-[22px] w-[22px] place-items-center rounded-[5px] bg-white/[7%] p-0 text-muted" aria-label="Add project" (click)="openProjectComposer($event)"><svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke-linecap="round"/></svg></button>
       </span>
       <button
         *ngFor="let project of projects()"
         type="button"
-        class="project-item"
-        [class.project-item--active]="activeProject() === project.name"
+        class="flex min-h-10 w-full items-center gap-[11px] rounded-[10px] bg-transparent px-3 py-2 text-left text-[13px] text-muted transition-colors duration-200 hover:bg-white/5 hover:text-ink"
+        [class.bg-white/[6%]]="activeProject() === project.name"
+        [class.text-ink]="activeProject() === project.name"
         (click)="selectProject(project)">
-        <span class="project-dot" [style.background]="project.color"></span>
-        <span>{{ project.name }}</span>
-        <span class="project-more" aria-hidden="true">···</span>
+        <span class="h-2 w-2 shrink-0 rounded-[3px]" [style.background]="project.color"></span>
+        <span class="min-w-0 flex-1 truncate">{{ project.name }}</span>
+        <span class="ml-auto text-subtle" aria-hidden="true"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.3"/><circle cx="10" cy="10" r="1.3"/><circle cx="16" cy="10" r="1.3"/></svg></span>
       </button>
     </nav>
 
-    <div class="sidebar-bottom">
-      <button class="sidebar-utility" type="button" (click)="openDialog('settings')">
-        <span class="nav-icon settings-icon" aria-hidden="true"></span>
+    <div class="mt-8 shrink-0">
+      <button class="mb-[15px] flex min-h-10 w-full items-center gap-[11px] rounded-[10px] bg-transparent px-3 py-2.5 text-left text-[13px] text-muted transition-colors hover:bg-white/5 hover:text-ink" type="button" (click)="openDialog('settings')">
+        <svg class="h-4 w-4 shrink-0 text-muted opacity-85" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m8.2 3.4.5-1h2.6l.5 1a6.8 6.8 0 0 1 1.4.8l1.1-.2 1.3 2.3-.7.8c.2.5.3 1 .3 1.5l.9.7v2.6l-.9.7c0 .5-.1 1-.3 1.5l.7.8-1.3 2.3-1.1-.2a6.8 6.8 0 0 1-1.4.8l-.5 1H8.7l-.5-1a6.8 6.8 0 0 1-1.4-.8l-1.1.2-1.3-2.3.7-.8a6.8 6.8 0 0 1-.3-1.5l-.9-.7V9.3l.9-.7c0-.5.1-1 .3-1.5l-.7-.8 1.3-2.3 1.1.2a6.8 6.8 0 0 1 1.4-.8Z" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.5"/></svg>
         <span>Settings</span>
       </button>
-      <div class="profile-card">
-        <div class="profile-avatar">MM</div>
-        <div class="profile-copy">
-          <strong>Mostafa Mohamed</strong>
-          <span>Product designer</span>
+      <div class="flex items-center gap-[9px] border-t border-line px-[7px] pt-3">
+        <div class="grid h-[31px] w-[31px] shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#f09c8d] to-[80%] to-purple text-[9px] font-bold text-white">MM</div>
+        <div class="grid min-w-0 flex-1 gap-[3px]">
+          <strong class="overflow-hidden truncate text-[11px] font-semibold">Mostafa Mohamed</strong>
+          <span class="truncate text-[10px] text-subtle">Product designer</span>
         </div>
-        <button type="button" class="profile-more" aria-label="Profile options">···</button>
+        <button type="button" class="bg-transparent p-1.5 text-muted" aria-label="Profile options"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="4" cy="10" r="1.3"/><circle cx="10" cy="10" r="1.3"/><circle cx="16" cy="10" r="1.3"/></svg></button>
       </div>
     </div>
   </aside>
 
-  <div class="sidebar-backdrop" *ngIf="isSidebarOpen()" (click)="isSidebarOpen.set(false)"></div>
+  <div class="fixed inset-0 z-[19] bg-black/60 backdrop-blur-[2px] md:hidden" *ngIf="isSidebarOpen()" (click)="isSidebarOpen.set(false)"></div>
 
-  <main class="dashboard">
-    <header class="topbar">
+  <main class="min-w-0 flex-1 overflow-x-clip">
+    <header class="sticky top-0 z-10 flex min-h-[68px] items-center justify-between gap-2 border-b border-line bg-[#10111a]/95 px-[14px] backdrop-blur-md md:min-h-[82px] md:gap-5 md:px-[clamp(18px,4vw,62px)]">
       <button
-        class="mobile-menu"
+        class="grid h-10 w-10 shrink-0 gap-[3px] rounded-lg bg-transparent px-2.5 py-3 md:hidden"
         type="button"
         (click)="isSidebarOpen.set(true)"
         aria-label="Open menu"
         [attr.aria-expanded]="isSidebarOpen()">
-        <span></span><span></span><span></span>
+        <svg class="h-4 w-4 text-muted" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke-linecap="round"/></svg>
       </button>
-      <div class="breadcrumb">
-        <span class="muted">Workspace</span>
-        <span class="breadcrumb-separator">/</span>
-        <strong>{{ activeNav() }}</strong>
+      <div class="ml-[5px] flex min-w-0 items-center gap-2.5 overflow-hidden text-xs">
+        <span class="hidden text-subtle min-[431px]:inline">Workspace</span>
+        <span class="hidden text-[#4e4e5e] min-[431px]:inline">/</span>
+        <strong class="truncate font-semibold">{{ activeNav() }}</strong>
       </div>
-      <div class="topbar-actions">
-        <label class="search-box">
-          <span class="search-icon" aria-hidden="true"></span>
+      <div class="flex shrink-0 items-center gap-[5px] md:gap-[13px]">
+        <label class="ml-auto flex w-8 items-center gap-2 rounded-[10px] border-0 bg-transparent p-[9px] md:w-[clamp(150px,22vw,230px)] md:border md:border-line md:bg-white/[2.5%] md:px-[11px] md:py-[9px]">
+          <svg class="h-4 w-4 shrink-0 text-muted" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8.5" cy="8.5" r="4.5"/><path d="m12 12 4 4" stroke-linecap="round"/></svg>
         <input
             #searchInput
             type="search"
@@ -93,271 +109,282 @@
             (input)="searchQuery.set($any($event.target).value)"
             placeholder="Search tasks..."
             aria-label="Search tasks"
-            autocomplete="off">
-          <span class="search-shortcut">⌘ K</span>
+            autocomplete="off"
+            class="hidden w-full min-w-0 border-0 bg-transparent text-[11px] text-ink outline-none placeholder:text-[#6f6f80] md:block">
+          <span class="hidden whitespace-nowrap text-[9px] text-[#6c6c7a] md:inline">⌘ K</span>
         </label>
-        <button type="button" class="topbar-icon notification-button" aria-label="Notifications" (click)="openDialog('notifications')">
-          <span class="bell-icon" aria-hidden="true"></span>
-          <i *ngIf="unreadNotifications()"></i>
+        <button type="button" class="relative grid h-8 w-8 place-items-center rounded-[9px] bg-transparent font-semibold text-muted hover:bg-white/[6%] hover:text-ink min-[361px]:grid" aria-label="Notifications" (click)="openDialog('notifications')">
+          <svg class="h-4 w-4 text-current" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8a5 5 0 0 1 10 0v3.5l1.5 2H3.5l1.5-2V8ZM8 16h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <i class="absolute right-[5px] top-[5px] h-[5px] w-[5px] rounded-full bg-[#ff8f7d]" *ngIf="unreadNotifications()"></i>
         </button>
-        <button type="button" class="topbar-icon" aria-label="Help" (click)="openDialog('help')">?</button>
-       <button type="button" class="topbar-avatar" aria-label="Open profile" (click)="openDialog('profile')">MM</button>
+        <button type="button" class="hidden h-8 w-8 place-items-center rounded-[9px] bg-transparent text-muted hover:bg-white/[6%] hover:text-ink min-[431px]:grid" aria-label="Help" (click)="openDialog('help')"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M8.3 7.5a1.8 1.8 0 1 1 3.1 1.3c-.8.8-1.4 1.1-1.4 2.2M10 14.2v.1" stroke-linecap="round"/></svg></button>
+       <button type="button" class="hidden h-[31px] w-[31px] place-items-center rounded-[9px] bg-gradient-to-br from-[#f09c8d] to-[80%] to-purple text-[9px] font-bold text-white min-[431px]:grid" aria-label="Open profile" (click)="openDialog('profile')">MM</button>
       </div>
     </header>
 
-    <div class="dashboard-content">
-      <section class="welcome-row">
+    <div class="mx-auto w-full max-w-[1380px] px-[14px] pb-[18px] pt-[26px] md:px-5 md:pb-5 md:pt-[31px] lg:px-[clamp(18px,3vw,36px)] xl:px-[clamp(18px,4vw,62px)] xl:pb-[25px] xl:pt-[43px]">
+      <section class="mb-6 flex flex-col items-start justify-between gap-6 md:mb-[31px] md:flex-row md:items-end">
         <div>
-          <div class="date-kicker">{{ todayLabel }}</div>
-          <h1>Good morning, Mostafa <span class="wave" aria-hidden="true">✦</span></h1>
-          <p>Here’s what’s happening with your tasks today.</p>
+          <div class="mb-[9px] text-[11px] font-semibold text-purple-light">{{ todayLabel }}</div>
+          <h1 class="font-display text-[clamp(26px,3vw,36px)] font-semibold leading-[1.15] tracking-[-1.4px]">Good morning, Mostafa <svg class="inline-block h-5 w-5 align-[-2px] text-[#f4b06e]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="m10 1.5 1.8 5 5.2 1.8-5.2 1.8-1.8 5-1.8-5L3 8.3l5.2-1.8L10 1.5Z"/></svg></h1>
+          <p class="mt-2.5 text-[13px] text-muted">Here’s what’s happening with your tasks today.</p>
         </div>
-        <button type="button" class="primary-button" (click)="showComposer.set(!showComposer())">
-          <span class="plus-symbol" aria-hidden="true">+</span>
+        <button type="button" class="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-purple px-4 py-3 text-xs font-semibold text-white shadow-[0_10px_22px_rgb(117_104_246_/_22%)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgb(117_104_246_/_32%)] md:w-auto" (click)="showComposer.set(!showComposer())">
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke-linecap="round"/></svg>
           Add new task
         </button>
       </section>
 
       <form
         *ngIf="showComposer()"
-        class="composer"
+        class="-mt-3 mb-[25px] flex items-center gap-[13px] rounded-[14px] border border-purple/[36%] bg-purple/[9%] px-[15px] py-[13px]"
         [formGroup]="todoForm"
         (ngSubmit)="addTodo()">
-        <div class="composer-input">
-          <span class="composer-check" aria-hidden="true"></span>
-          <input formControlName="title" placeholder="What needs to be done?" autofocus>
+        <div class="flex min-w-0 flex-1 items-center gap-2.5">
+          <span class="h-4 w-4 shrink-0 rounded-full border border-purple-light" aria-hidden="true"></span>
+          <input class="w-full border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-muted" formControlName="title" placeholder="What needs to be done?" autofocus>
         </div>
-        <span class="composer-hint">Press Enter to add</span>
-        <button type="submit" [disabled]="todoForm.invalid">Add task</button>
+        <span class="hidden text-[10px] text-subtle sm:inline">Press Enter to add</span>
+        <button class="rounded-lg bg-purple px-[13px] py-2 text-[11px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-45" type="submit" [disabled]="todoForm.invalid">Add task</button>
       </form>
 
-      <section class="overview-grid">
-        <article class="focus-card">
-          <div class="focus-orbit orbit-one"></div>
-          <div class="focus-orbit orbit-two"></div>
-          <div class="focus-topline">
-            <span class="focus-pill"><span class="focus-pill-dot"></span> Focus of the week</span>
-             <button type="button" class="card-menu" aria-label="Focus options" (click)="openDialog('help')">···</button>
+      <section class="mb-[18px] grid grid-cols-1 gap-[18px] xl:grid-cols-[minmax(0,1.15fr)_minmax(300px,.85fr)]">
+        <article class="relative min-h-[268px] min-w-0 overflow-hidden rounded-[17px] border border-line bg-[radial-gradient(circle_at_100%_0%,rgb(132_120_255_/_24%),transparent_46%),linear-gradient(130deg,#26233e,#1b1b2b_68%)] px-[18px] pb-[21px] pt-6 sm:px-[26px]">
+          <div class="pointer-events-none absolute -right-10 -top-[88px] h-[240px] w-[240px] rounded-full border border-[#a49cff]/[11%]"></div>
+          <div class="pointer-events-none absolute right-[13px] -top-[60px] h-[180px] w-[180px] rounded-full border border-[#a49cff]/[11%]"></div>
+          <div class="relative z-[1] flex items-start justify-between">
+            <span class="inline-flex max-w-[calc(100%-38px)] items-center gap-[7px] truncate rounded-lg bg-purple/[17%] px-[9px] py-1.5 text-[10px] font-semibold text-[#bcb5ff]"><span class="h-1.5 w-1.5 shrink-0 rounded-full bg-purple-light shadow-[0_0_0_4px_rgb(170_160_255_/_9%)]"></span> Focus of the week</span>
+             <button type="button" class="bg-transparent p-1.5 text-muted" aria-label="Focus options" (click)="openDialog('help')"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="4" cy="10" r="1.3"/><circle cx="10" cy="10" r="1.3"/><circle cx="16" cy="10" r="1.3"/></svg></button>
           </div>
-          <div class="focus-content">
-            <div class="focus-icon" aria-hidden="true">✦</div>
+          <div class="relative z-[1] my-5 flex max-w-[410px] items-start gap-3.5 sm:my-[23px]">
+            <div class="grid h-9 w-9 shrink-0 place-items-center rounded-[11px] border border-white/[12%] bg-white/[9%] text-[#c7c1ff]" aria-hidden="true"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="m10 1.5 1.8 5 5.2 1.8-5.2 1.8-1.8 5-1.8-5L3 8.3l5.2-1.8L10 1.5Z"/></svg></div>
             <div>
-              <span class="focus-label">Current project</span>
-               <h2>{{ activeProject() }}</h2>
-              <p>Keep the core experience moving forward, one meaningful task at a time.</p>
+              <span class="text-[10px] text-muted">Current project</span>
+               <h2 class="mt-1.5 font-display text-lg font-semibold leading-tight tracking-[-.6px] sm:text-[21px]">{{ activeProject() }}</h2>
+              <p class="mt-2 max-w-none text-[11px] leading-[1.55] text-[#a4a1b6] sm:max-w-[360px]">Keep the core experience moving forward, one meaningful task at a time.</p>
             </div>
           </div>
-          <div class="focus-progress-row">
-            <div class="progress-track"><span [style.width.%]="progress()"></span></div>
-            <strong>{{ progress() }}%</strong>
+          <div class="relative z-[1] flex items-center gap-[11px]">
+            <div class="h-[5px] flex-1 overflow-hidden rounded-full bg-white/[11%]"><span class="block h-full rounded-full bg-gradient-to-r from-[#8d83ff] to-[#c0b9ff]" [style.width.%]="progress()"></span></div>
+            <strong class="text-[11px] text-[#d6d2ff]">{{ progress() }}%</strong>
           </div>
-          <div class="focus-footer">
-            <div class="avatar-stack">
-              <span class="mini-avatar avatar-purple">M</span>
-              <span class="mini-avatar avatar-orange">S</span>
-              <span class="mini-avatar avatar-blue">A</span>
-              <span class="avatar-extra">+3</span>
+          <div class="relative z-[1] mt-[22px] flex items-end justify-between gap-3">
+            <div class="flex items-center">
+              <span class="grid h-[23px] w-[23px] place-items-center rounded-full border-2 border-[#222033] bg-gradient-to-br from-[#b0a7ff] to-[#6153db] text-[8px] font-bold text-white">M</span>
+              <span class="-ml-[5px] grid h-[23px] w-[23px] place-items-center rounded-full border-2 border-[#222033] bg-gradient-to-br from-[#ffba89] to-[#e8766e] text-[8px] font-bold text-white">S</span>
+              <span class="-ml-[5px] grid h-[23px] w-[23px] place-items-center rounded-full border-2 border-[#222033] bg-gradient-to-br from-[#91d5ef] to-[#4b7ed5] text-[8px] font-bold text-white">A</span>
+              <span class="-ml-[5px] grid h-[23px] w-[23px] place-items-center rounded-full border-2 border-[#222033] bg-[#3b394e] text-[8px] text-[#e0dded]">+3</span>
             </div>
-            <span class="focus-due">Due in 12 days <span aria-hidden="true">→</span></span>
+            <span class="text-right text-[10px] text-[#aaa7ba]">Due in 12 days <svg class="ml-1 inline-block h-3.5 w-3.5 align-[-3px] text-purple-light" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </article>
 
-        <article class="week-card">
-          <div class="section-heading">
+        <article class="min-h-[220px] min-w-0 overflow-hidden rounded-[17px] border border-line bg-panel px-[18px] pb-5 pt-6 sm:px-6">
+          <div class="relative z-[1] flex items-center justify-between">
             <div>
-              <span class="section-overline">Productivity</span>
-              <h2>Week at a glance</h2>
+              <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Productivity</span>
+              <h2 class="font-display text-xl font-semibold leading-tight tracking-[-.6px]">Week at a glance</h2>
             </div>
-             <button type="button" class="icon-button" aria-label="More productivity options" (click)="openDialog('help')">···</button>
+             <button type="button" class="bg-transparent p-1.5 text-muted" aria-label="More productivity options" (click)="openDialog('help')"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="4" cy="10" r="1.3"/><circle cx="10" cy="10" r="1.3"/><circle cx="16" cy="10" r="1.3"/></svg></button>
           </div>
-          <div class="week-stats">
-            <div><strong>{{ completedCount() }}</strong><span>Completed</span></div>
-            <div><strong>{{ activeCount() }}</strong><span>In progress</span></div>
-            <div><strong>{{ todos().length }}</strong><span>Total tasks</span></div>
+          <div class="my-5 grid grid-cols-3 gap-2 sm:gap-3">
+            <div class="grid gap-[3px]"><strong class="font-display text-lg font-semibold leading-none sm:text-xl">{{ completedCount() }}</strong><span class="overflow-hidden truncate text-[9px] text-subtle">Completed</span></div>
+            <div class="grid gap-[3px]"><strong class="font-display text-lg font-semibold leading-none sm:text-xl">{{ activeCount() }}</strong><span class="overflow-hidden truncate text-[9px] text-subtle">In progress</span></div>
+            <div class="grid gap-[3px]"><strong class="font-display text-lg font-semibold leading-none sm:text-xl">{{ todos().length }}</strong><span class="overflow-hidden truncate text-[9px] text-subtle">Total tasks</span></div>
           </div>
-          <div class="bar-chart" aria-label="Weekly task activity">
-            <div class="bar-group" *ngFor="let day of weekDays" [class.bar-group--today]="day.today">
-              <div class="bar-rail"><span [style.height.%]="day.value"></span></div>
+          <div class="flex h-[74px] max-w-[420px] items-end justify-between border-b border-line px-[5px]" aria-label="Weekly task activity">
+            <div class="grid h-full justify-items-center gap-[7px] text-[9px] text-subtle" *ngFor="let day of weekDays" [class.font-semibold]="day.today" [class.text-[#c6c0ff]]="day.today">
+              <div class="flex h-[54px] items-end"><span class="min-h-1.5 w-[9px] rounded-[5px] bg-[#4a495c]" [class.bg-gradient-to-b]="day.today" [class.from-[#bcb6ff]]="day.today" [class.to-[#7165f2]]="day.today" [class.shadow-[0_4px_12px_rgb(117_104_246_/_30%)]]="day.today" [style.height.%]="day.value"></span></div>
               <span>{{ day.label }}</span>
             </div>
           </div>
         </article>
       </section>
 
-      <section class="calendar-strip">
-        <div class="calendar-copy">
-          <span class="section-overline">Your schedule</span>
-           <h2>{{ monthName }} <span>{{ year }}</span></h2>
-           <p class="calendar-selection">{{ activeNav() === 'Calendar' ? selectedDateLabel() : 'Select a day to view its tasks' }}</p>
+      <section class="mb-[30px] flex flex-col items-start gap-[15px] rounded-[17px] border border-line bg-panel p-[18px] md:flex-row md:items-center md:gap-[27px] md:px-[22px] md:py-[18px]">
+        <div class="shrink-0">
+          <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Your schedule</span>
+           <h2 class="font-display text-base font-semibold leading-tight tracking-[-.6px]">{{ monthName }} <span class="font-sans text-[13px] font-normal text-subtle">{{ year }}</span></h2>
+           <p class="mt-1 text-[9px] text-subtle">{{ activeNav() === 'Calendar' ? selectedDateLabel() : 'Select a day to view its tasks' }}</p>
         </div>
-        <div class="calendar-days">
+        <div class="flex w-full min-w-0 flex-1 gap-[5px] overflow-x-auto pb-[3px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:pb-0">
           <button
             *ngFor="let day of calendarDays"
             type="button"
-            class="calendar-day"
-            [class.calendar-day--selected]="day.selected"
-            [class.calendar-day--muted]="day.muted"
+            class="relative grid min-w-[38px] flex-[1_0_38px] place-items-center gap-1 rounded-[9px] bg-transparent px-[7px] pb-1 pt-[3px] text-subtle hover:bg-white/5 md:min-w-[35px] md:flex-1"
+            [class.bg-purple]="day.selected"
+            [class.text-white]="day.selected"
+            [class.opacity-45]="day.muted"
             [attr.aria-pressed]="day.selected"
              (click)="selectDay(day.date)">
-            <span>{{ day.label }}</span>
-            <strong>{{ day.number }}</strong>
-            <i *ngIf="day.hasTask"></i>
+            <span class="text-[9px] uppercase">{{ day.label }}</span>
+            <strong class="font-display text-[13px] font-semibold text-[#e5e3ee]">{{ day.number }}</strong>
+            <i class="absolute bottom-0 h-[3px] w-[3px] rounded-full bg-[#f2b07a]" [class.bg-white]="day.selected" *ngIf="day.hasTask"></i>
           </button>
         </div>
-        <button type="button" class="outline-button" (click)="selectNav('Calendar')">Open calendar <span aria-hidden="true">→</span></button>
+        <button type="button" class="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-[10px] border border-line bg-transparent px-3 py-[9px] text-[10px] text-muted hover:border-purple-light hover:text-ink md:w-auto" (click)="selectNav('Calendar')">Open calendar <svg class="h-3.5 w-3.5 text-purple-light" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </section>
 
-       <section class="analytics-panel" *ngIf="activeNav() === 'Analytics'">
-         <div class="section-heading">
+       <section class="mb-[30px] rounded-2xl border border-line bg-[#171822] px-[18px] py-6 sm:px-[25px]" *ngIf="activeNav() === 'Analytics'">
+         <div class="relative z-[1] flex items-center justify-between">
            <div>
-             <span class="section-overline">Performance</span>
-             <h2>Progress overview</h2>
+             <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Performance</span>
+             <h2 class="font-display text-xl font-semibold leading-tight tracking-[-.6px]">Progress overview</h2>
            </div>
-           <span class="analytics-period">All tasks</span>
+           <span class="rounded-md bg-white/[5%] px-2.5 py-1.5 text-[10px] text-muted">All tasks</span>
          </div>
-         <div class="analytics-grid">
-           <div class="analytics-stat">
-             <strong>{{ progress() }}%</strong>
-             <span>Completion rate</span>
+         <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+           <div class="grid gap-1 rounded-xl border border-line bg-white/[2%] p-4">
+             <strong class="font-display text-2xl font-semibold text-purple-light">{{ progress() }}%</strong>
+             <span class="text-[10px] text-muted">Completion rate</span>
            </div>
-           <div class="analytics-stat">
-             <strong>{{ activeCount() }}</strong>
-             <span>Tasks in progress</span>
+           <div class="grid gap-1 rounded-xl border border-line bg-white/[2%] p-4">
+             <strong class="font-display text-2xl font-semibold text-purple-light">{{ activeCount() }}</strong>
+             <span class="text-[10px] text-muted">Tasks in progress</span>
            </div>
-           <div class="analytics-stat">
-             <strong>{{ completedCount() }}</strong>
-             <span>Tasks completed</span>
+           <div class="grid gap-1 rounded-xl border border-line bg-white/[2%] p-4">
+             <strong class="font-display text-2xl font-semibold text-purple-light">{{ completedCount() }}</strong>
+             <span class="text-[10px] text-muted">Tasks completed</span>
            </div>
          </div>
-         <div class="analytics-progress">
-           <div class="analytics-progress__label"><span>{{ completionLabel() }}</span><strong>{{ progress() }}%</strong></div>
-           <div class="progress-track"><span [style.width.%]="progress()"></span></div>
+         <div class="mt-5">
+           <div class="mb-2 flex justify-between text-[10px] text-muted"><span>{{ completionLabel() }}</span><strong class="text-purple-light">{{ progress() }}%</strong></div>
+           <div class="h-[5px] overflow-hidden rounded-full bg-white/[11%]"><span class="block h-full rounded-full bg-gradient-to-r from-[#8d83ff] to-[#c0b9ff]" [style.width.%]="progress()"></span></div>
          </div>
        </section>
 
-       <section class="tasks-section">
-        <div class="tasks-header">
+       <section class="min-w-0 overflow-hidden rounded-[17px] border border-line bg-[#171822] px-[11px] pb-2 pt-5 sm:px-[15px] md:px-[25px] md:pt-[25px]">
+        <div class="mb-[18px] flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
           <div>
-            <span class="section-overline">Task list</span>
-            <h2>{{ activeNav() === 'Overview' ? 'Your tasks' : activeNav() }}</h2>
+            <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Task list</span>
+            <h2 class="font-display text-xl font-semibold leading-tight tracking-[-.6px]">{{ activeNav() === 'Overview' ? 'Your tasks' : activeNav() }}</h2>
           </div>
-          <div class="view-toggle" role="tablist" aria-label="Task filters">
+          <div class="flex w-full gap-1 rounded-[9px] bg-[#11121b] p-1 sm:w-auto" role="tablist" aria-label="Task filters">
             <button
               type="button"
               role="tab"
               [attr.aria-selected]="filter() === 'all'"
-              [class.active]="filter() === 'all'"
+              [class.bg-[#2b2a3a]]="filter() === 'all'"
+              [class.text-[#d2cdff]]="filter() === 'all'"
               (click)="setFilter('all')">
-              All <span>{{ todos().length }}</span>
+              <span class="block whitespace-nowrap rounded-md px-[5px] py-[7px] text-[9px] text-subtle sm:px-[9px] sm:text-[10px]" [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'all'">All <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'all'">{{ todos().length }}</span></span>
             </button>
             <button
               type="button"
               role="tab"
               [attr.aria-selected]="filter() === 'active'"
-              [class.active]="filter() === 'active'"
+              [class.bg-[#2b2a3a]]="filter() === 'active'"
+              [class.text-[#d2cdff]]="filter() === 'active'"
               (click)="setFilter('active')">
-              In progress <span>{{ activeCount() }}</span>
+              <span class="block whitespace-nowrap rounded-md px-[5px] py-[7px] text-[9px] text-subtle sm:px-[9px] sm:text-[10px]" [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'active'">In progress <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'active'">{{ activeCount() }}</span></span>
             </button>
             <button
               type="button"
               role="tab"
               [attr.aria-selected]="filter() === 'completed'"
-              [class.active]="filter() === 'completed'"
+              [class.bg-[#2b2a3a]]="filter() === 'completed'"
+              [class.text-[#d2cdff]]="filter() === 'completed'"
               (click)="setFilter('completed')">
-              Completed <span>{{ completedCount() }}</span>
+              <span class="block whitespace-nowrap rounded-md px-[5px] py-[7px] text-[9px] text-subtle sm:px-[9px] sm:text-[10px]" [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'completed'">Completed <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'completed'">{{ completedCount() }}</span></span>
             </button>
           </div>
         </div>
 
-        <div class="tasks-list">
+        <div class="grid">
           <ng-container *ngIf="filteredTodos().length; else emptyTasks">
             <article
-              class="task-row"
+              class="flex min-h-[89px] items-start gap-2.5 border-t border-line px-1 py-4 transition-colors duration-200 hover:-mx-[9px] hover:rounded-[10px] hover:bg-white/[2.5%] hover:px-[13px] sm:items-center sm:gap-[13px]"
               *ngFor="let todo of filteredTodos()"
-              [class.task-row--done]="todo.completed">
+              [class.text-muted]="todo.completed">
               <button
                 type="button"
-                class="task-check"
-                [class.task-check--done]="todo.completed"
+                class="mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded-md border border-[#525263] bg-transparent p-0 text-[11px] text-white hover:border-purple-light sm:mt-0"
+                [class.border-purple]="todo.completed"
+                [class.bg-purple]="todo.completed"
                 (click)="toggleTodo(todo.id)"
                 [attr.aria-label]="todo.completed ? 'Mark task as in progress' : 'Mark task as complete'">
-                <span *ngIf="todo.completed" aria-hidden="true">✓</span>
+                <svg *ngIf="todo.completed" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <div class="task-main">
+              <div class="min-w-0 flex-1">
                 <ng-container *ngIf="editingTodo()?.id !== todo.id; else editTask">
-                  <div class="task-title-line">
-                    <h3>{{ todo.title }}</h3>
-                    <span class="priority" [class]="'priority priority--' + (todo.priority || 'Medium').toLowerCase()">{{ todo.priority || 'Medium' }}</span>
+                  <div class="flex min-w-0 flex-col items-start gap-[5px] sm:flex-row sm:items-center sm:gap-[9px]">
+                    <h3 class="min-w-0 truncate text-[13px] font-semibold" [class.text-muted]="todo.completed" [class.line-through]="todo.completed">{{ todo.title }}</h3>
+                    <span class="rounded-[5px] px-[7px] py-1 text-[8px] font-bold uppercase" [ngClass]="{
+                      'bg-[#f87e75]/[12%] text-[#fb9a91]': (todo.priority || 'Medium') === 'High',
+                      'bg-[#f7b970]/[12%] text-[#f3bd76]': (todo.priority || 'Medium') === 'Medium',
+                      'bg-[#70d6a5]/[11%] text-[#75d8a9]': (todo.priority || 'Medium') === 'Low'
+                    }">{{ todo.priority || 'Medium' }}</span>
                   </div>
-                  <p>{{ todo.description || 'No description added yet. Keep the details close to the work.' }}</p>
-                  <div class="task-meta">
-                    <span class="task-project"><i [style.background]="categoryColor(todo)" aria-hidden="true"></i>{{ todo.category?.name || 'Frontend' }}</span>
-                    <span class="meta-separator">·</span>
+                  <p class="mt-[5px] truncate text-[10px] text-subtle">{{ todo.description || 'No description added yet. Keep the details close to the work.' }}</p>
+                  <div class="mt-2 flex flex-wrap items-center gap-[7px] text-[9px] text-[#6e6e7f]">
+                    <span class="inline-flex items-center gap-[5px] text-[#8f8da0]"><i class="h-1.5 w-1.5 rounded-sm" [style.background]="categoryColor(todo)" aria-hidden="true"></i>{{ todo.category?.name || 'Frontend' }}</span>
+                    <span class="text-[#464655]">·</span>
                     <span>Due {{ formatDate(todo.dueDate) }}</span>
                   </div>
                 </ng-container>
                 <ng-template #editTask>
-                  <div class="task-edit">
+                  <div class="flex flex-wrap items-center gap-2">
                     <input
                       type="text"
                       [value]="editingTitle()"
                       (input)="editingTitle.set($any($event.target).value)"
                       (keydown.enter)="saveEditing()"
                       (keydown.escape)="cancelEditing()"
-                      aria-label="Edit task title">
-                    <button type="button" class="task-edit-action" (click)="saveEditing()" [disabled]="editingTitle().trim().length < 3">Save</button>
-                    <button type="button" class="task-edit-cancel" (click)="cancelEditing()">Cancel</button>
+                      aria-label="Edit task title"
+                      class="min-w-[180px] flex-1 rounded-md border border-purple-light/60 bg-white/[5%] px-2.5 py-2 text-xs text-ink outline-none">
+                    <button type="button" class="rounded-md bg-purple px-2.5 py-2 text-[10px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40" (click)="saveEditing()" [disabled]="editingTitle().trim().length < 3">Save</button>
+                    <button type="button" class="rounded-md bg-white/[6%] px-2.5 py-2 text-[10px] font-semibold text-muted" (click)="cancelEditing()">Cancel</button>
                   </div>
                 </ng-template>
               </div>
-              <div class="task-assignees">
-                <span class="mini-avatar avatar-purple">M</span>
-                <span class="mini-avatar avatar-orange">S</span>
+              <div class="hidden sm:flex">
+                <span class="grid h-[22px] w-[22px] place-items-center rounded-full border-2 border-[#222033] bg-gradient-to-br from-[#b0a7ff] to-[#6153db] text-[8px] font-bold text-white">M</span>
+                <span class="-ml-[5px] grid h-[22px] w-[22px] place-items-center rounded-full border-2 border-[#222033] bg-gradient-to-br from-[#ffba89] to-[#e8766e] text-[8px] font-bold text-white">S</span>
               </div>
-              <div class="task-actions">
-                <button type="button" class="task-edit-button" (click)="startEditing(todo)" [attr.aria-label]="'Edit ' + todo.title">✎</button>
-                <button type="button" class="task-menu" (click)="deleteTodo(todo.id)" [attr.aria-label]="'Delete ' + todo.title">×</button>
+              <div class="flex shrink-0 items-center gap-0 sm:gap-1">
+                <button type="button" class="grid h-7 w-7 place-items-center rounded-md bg-transparent p-0 text-subtle transition-colors hover:bg-purple/[12%] hover:text-purple-light" (click)="startEditing(todo)" [attr.aria-label]="'Edit ' + todo.title"><svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m13.5 3.5 3 3M5 15l.5-3.5L13.5 3.5a2.1 2.1 0 0 1 3 3L8.5 14.5 5 15Z" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button type="button" class="grid h-7 w-7 place-items-center rounded-md bg-transparent p-0 text-subtle transition-colors hover:bg-[#f87e75]/[12%] hover:text-[#fb9a91]" (click)="deleteTodo(todo.id)" [attr.aria-label]="'Delete ' + todo.title"><svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke-linecap="round"/></svg></button>
               </div>
             </article>
           </ng-container>
           <ng-template #emptyTasks>
-            <div class="empty-tasks">
-              <div class="empty-icon">✓</div>
-              <h3>{{ searchQuery() ? 'No matching tasks' : 'Nothing here yet' }}</h3>
-              <p>{{ searchQuery() ? 'Try a different search term.' : 'Add your first task to start making progress.' }}</p>
-              <button type="button" class="secondary-button" (click)="showComposer.set(true)">Create a task</button>
+            <div class="grid justify-items-center px-5 py-[43px] text-center">
+              <div class="mb-3 grid h-[38px] w-[38px] place-items-center rounded-xl bg-purple/[13%] text-purple-light"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <h3 class="text-sm">{{ searchQuery() ? 'No matching tasks' : 'Nothing here yet' }}</h3>
+              <p class="mt-1.5 text-[11px] text-subtle">{{ searchQuery() ? 'Try a different search term.' : 'Add your first task to start making progress.' }}</p>
+              <button type="button" class="mt-[15px] inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#29283a] px-3 py-[9px] text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e]" (click)="showComposer.set(true)">Create a task</button>
             </div>
           </ng-template>
         </div>
       </section>
 
-      <footer class="dashboard-footer">
+      <footer class="flex flex-col items-start gap-3 px-[3px] pt-6 text-[10px] text-[#5e5e6d] sm:flex-row sm:justify-between">
         <span>Made for focused work</span>
-        <span class="footer-links">
-          <button type="button" (click)="openDialog('help')">Keyboard shortcuts</button>
-          <button type="button" (click)="openDialog('help')">Help center</button>
+        <span class="flex gap-4">
+          <button class="bg-transparent p-0 text-inherit hover:text-muted" type="button" (click)="openDialog('help')">Keyboard shortcuts</button>
+          <button class="bg-transparent p-0 text-inherit hover:text-muted" type="button" (click)="openDialog('help')">Help center</button>
         </span>
       </footer>
     </div>
   </main>
 </div>
 
-<div class="inline-alert" *ngIf="error$ | async as error" role="alert">
+<div class="fixed bottom-5 left-1/2 z-[60] flex max-w-[min(92vw,520px)] -translate-x-1/2 items-center gap-4 rounded-xl border border-[#f87e75]/30 bg-[#281c27] px-4 py-3 text-xs text-[#ffd4cf] shadow-[0_14px_34px_rgb(0_0_0_/_30%)]" *ngIf="error$ | async as error" role="alert">
   <span>{{ error }}</span>
-  <button type="button" (click)="retryLoad()">Retry</button>
+  <button class="rounded-md bg-[#f87e75]/15 px-3 py-1.5 font-semibold text-[#ffaaa2]" type="button" (click)="retryLoad()">Retry</button>
 </div>
 
-<div class="dialog-backdrop" *ngIf="showProjectComposer()" (click)="showProjectComposer.set(false)">
-  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" (click)="$event.stopPropagation()">
-    <div class="dialog-header">
+<div class="fixed inset-0 z-[80] grid place-items-center overflow-y-auto bg-black/65 p-5 backdrop-blur-sm" *ngIf="showProjectComposer()" (click)="showProjectComposer.set(false)">
+  <section class="w-full max-w-[480px] rounded-2xl border border-line bg-[#1b1b2a] p-5 shadow-[0_22px_70px_rgb(0_0_0_/_45%)] sm:p-6" role="dialog" aria-modal="true" aria-labelledby="project-dialog-title" (click)="$event.stopPropagation()">
+    <div class="flex items-start justify-between gap-4">
       <div>
-        <span class="section-overline">Workspace</span>
-        <h2 id="project-dialog-title">Create a project</h2>
+        <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Workspace</span>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" id="project-dialog-title">Create a project</h2>
       </div>
-      <button type="button" class="dialog-close" aria-label="Close" (click)="showProjectComposer.set(false)">×</button>
+      <button type="button" class="rounded-lg bg-transparent p-2 text-muted hover:bg-white/5 hover:text-ink" aria-label="Close" (click)="showProjectComposer.set(false)"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke-linecap="round"/></svg></button>
     </div>
-    <p class="dialog-copy">Group related work into a focused space for your team.</p>
-    <label class="dialog-field">
+    <p class="mt-3 text-xs leading-6 text-muted">Group related work into a focused space for your team.</p>
+    <label class="mt-5 grid gap-2 text-xs font-semibold text-muted">
       <span>Project name</span>
       <input
         type="text"
@@ -365,116 +392,117 @@
         (input)="projectName.set($any($event.target).value)"
         (keydown.enter)="createProject()"
         placeholder="e.g. Mobile launch"
+        class="rounded-lg border border-line bg-white/[4%] px-3 py-3 text-sm text-ink outline-none transition-colors focus:border-purple-light"
         autofocus>
     </label>
-    <div class="dialog-actions">
-      <button type="button" class="secondary-button" (click)="showProjectComposer.set(false)">Cancel</button>
-       <button type="button" class="primary-button" [disabled]="projectName().trim().length < 2 || projectLoading()" (click)="createProject()">
+    <div class="mt-6 flex justify-end gap-2">
+      <button type="button" class="mt-[15px] inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#29283a] px-3 py-[9px] text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e]" (click)="showProjectComposer.set(false)">Cancel</button>
+       <button type="button" class="inline-flex items-center justify-center gap-2 rounded-[10px] bg-purple px-4 py-3 text-xs font-semibold text-white shadow-[0_10px_22px_rgb(117_104_246_/_22%)] disabled:cursor-not-allowed disabled:opacity-45" [disabled]="projectName().trim().length < 2 || projectLoading()" (click)="createProject()">
          {{ projectLoading() ? 'Creating…' : 'Create project' }}
        </button>
     </div>
   </section>
 </div>
 
-<div class="dialog-backdrop" *ngIf="dialog()" (click)="closeDialog()">
-  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
-    <div class="dialog-header">
+<div class="fixed inset-0 z-[80] grid place-items-center overflow-y-auto bg-black/65 p-5 backdrop-blur-sm" *ngIf="dialog()" (click)="closeDialog()">
+  <section class="w-full max-w-[480px] rounded-2xl border border-line bg-[#1b1b2a] p-5 shadow-[0_22px_70px_rgb(0_0_0_/_45%)] sm:p-6" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <div class="flex items-start justify-between gap-4">
       <div>
-        <span class="section-overline">Taskly</span>
-        <h2 *ngIf="dialog() === 'notifications'">Notifications</h2>
-        <h2 *ngIf="dialog() === 'help'">Help & shortcuts</h2>
-        <h2 *ngIf="dialog() === 'settings'">Workspace settings</h2>
-        <h2 *ngIf="dialog() === 'profile'">Your profile</h2>
-        <h2 *ngIf="dialog() === 'workspace'">Workspace switcher</h2>
+        <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Taskly</span>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" *ngIf="dialog() === 'notifications'">Notifications</h2>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" *ngIf="dialog() === 'help'">Help & shortcuts</h2>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" *ngIf="dialog() === 'settings'">Workspace settings</h2>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" *ngIf="dialog() === 'profile'">Your profile</h2>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" *ngIf="dialog() === 'workspace'">Workspace switcher</h2>
       </div>
-      <button type="button" class="dialog-close" aria-label="Close" (click)="closeDialog()">×</button>
+      <button type="button" class="rounded-lg bg-transparent p-2 text-muted hover:bg-white/5 hover:text-ink" aria-label="Close" (click)="closeDialog()"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke-linecap="round"/></svg></button>
     </div>
 
     <ng-container *ngIf="dialog() === 'notifications'">
-      <div class="notification-list" *ngIf="notifications().length; else noNotifications">
-        <div class="notification-item" *ngFor="let notification of notifications()">
-          <span class="notification-status" [class.notification-status--read]="notification.read"></span>
-          <div>
-            <strong>{{ notification.message }}</strong>
-            <span>{{ formatDate(notification.createdAt) }}</span>
+      <div class="mt-5 grid gap-2" *ngIf="notifications().length; else noNotifications">
+        <div class="flex items-start gap-3 rounded-lg border border-line bg-white/[3%] px-3 py-3" *ngFor="let notification of notifications()">
+          <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#f3a66f]" [class.bg-[#5b5a6b]]="notification.read"></span>
+          <div class="grid min-w-0 gap-1">
+            <strong class="text-xs font-medium leading-5">{{ notification.message }}</strong>
+            <span class="text-[10px] text-subtle">{{ formatDate(notification.createdAt) }}</span>
           </div>
         </div>
       </div>
       <ng-template #noNotifications>
-        <div class="dialog-empty">
-        <div class="empty-icon">✓</div>
-        <h3>You're all caught up</h3>
-        <p>New assignments, comments, and task updates will appear here.</p>
+        <div class="grid justify-items-center py-8 text-center">
+        <div class="mb-3 grid h-[38px] w-[38px] place-items-center rounded-xl bg-purple/[13%] text-purple-light"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3 class="text-sm">You're all caught up</h3>
+        <p class="mt-2 max-w-[300px] text-xs leading-5 text-muted">New assignments, comments, and task updates will appear here.</p>
         </div>
       </ng-template>
     </ng-container>
 
     <ng-container *ngIf="dialog() === 'help'">
-      <div class="shortcut-list">
-        <div><span>Focus search</span><kbd>⌘ K</kbd></div>
-        <div><span>Close dialogs</span><kbd>Esc</kbd></div>
-        <div><span>Add a task</span><kbd>Enter</kbd></div>
+      <div class="mt-5 grid gap-2">
+        <div class="flex items-center justify-between rounded-lg border border-line bg-white/[3%] px-3 py-3 text-xs text-muted"><span>Focus search</span><kbd class="rounded-md border border-line bg-[#11121b] px-2 py-1 text-[10px] text-purple-light">Ctrl K</kbd></div>
+        <div class="flex items-center justify-between rounded-lg border border-line bg-white/[3%] px-3 py-3 text-xs text-muted"><span>Close dialogs</span><kbd class="rounded-md border border-line bg-[#11121b] px-2 py-1 text-[10px] text-purple-light">Esc</kbd></div>
+        <div class="flex items-center justify-between rounded-lg border border-line bg-white/[3%] px-3 py-3 text-xs text-muted"><span>Add a task</span><kbd class="rounded-md border border-line bg-[#11121b] px-2 py-1 text-[10px] text-purple-light">Enter</kbd></div>
       </div>
-      <p class="dialog-copy">Use the search field to find tasks by title or description. Select a workspace area from the sidebar to adjust the task view.</p>
+      <p class="mt-3 text-xs leading-6 text-muted">Use the search field to find tasks by title or description. Select a workspace area from the sidebar to adjust the task view.</p>
     </ng-container>
 
     <ng-container *ngIf="dialog() === 'settings'">
-      <div class="settings-row">
-        <div>
-          <strong>Appearance</strong>
-          <span>Choose how Taskly looks on this device.</span>
+      <div class="mt-5 flex flex-col items-start gap-4 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+        <div class="grid gap-1">
+          <strong class="text-xs">Appearance</strong>
+          <span class="text-[11px] text-muted">Choose how Taskly looks on this device.</span>
         </div>
-        <button type="button" class="secondary-button settings-action" (click)="toggleTheme()">
+        <button type="button" class="mt-0 w-full whitespace-nowrap rounded-[10px] bg-[#29283a] px-3 py-2 text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e] sm:w-auto" (click)="toggleTheme()">
           {{ theme() === 'dark' ? 'Dark mode' : 'Light mode' }}
         </button>
       </div>
-      <div class="settings-row">
-        <div>
-          <strong>Language</strong>
-          <span>Current: {{ language() === 'ar' ? 'العربية' : 'English' }}</span>
+      <div class="mt-5 flex flex-col items-start gap-4 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+        <div class="grid gap-1">
+          <strong class="text-xs">Language</strong>
+          <span class="text-[11px] text-muted">Current: {{ language() === 'ar' ? 'العربية' : 'English' }}</span>
         </div>
-        <div class="language-actions">
-          <button type="button" class="secondary-button settings-action" [class.active-setting]="language() === 'en'" (click)="setLanguage('en')">English</button>
-          <button type="button" class="secondary-button settings-action" [class.active-setting]="language() === 'ar'" (click)="setLanguage('ar')">العربية</button>
+        <div class="flex w-full gap-1 sm:w-auto">
+          <button type="button" class="mt-0 flex-1 rounded-[10px] bg-[#29283a] px-3 py-2 text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e]" [class.bg-purple]="language() === 'en'" [class.text-white]="language() === 'en'" (click)="setLanguage('en')">English</button>
+          <button type="button" class="mt-0 flex-1 rounded-[10px] bg-[#29283a] px-3 py-2 text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e]" [class.bg-purple]="language() === 'ar'" [class.text-white]="language() === 'ar'" (click)="setLanguage('ar')">العربية</button>
         </div>
       </div>
     </ng-container>
 
     <ng-container *ngIf="dialog() === 'profile'">
-      <div class="profile-dialog">
-        <div class="profile-avatar profile-avatar--large">MM</div>
-        <div>
+      <div class="mt-5 flex items-center gap-3 rounded-xl border border-line bg-white/[3%] p-4">
+        <div class="grid h-11 w-11 shrink-0 place-items-center rounded-[14px] bg-gradient-to-br from-[#f09c8d] to-[80%] to-purple text-[11px] font-bold text-white">MM</div>
+        <div class="grid gap-1">
           <strong>Mostafa Mohamed</strong>
           <span>Product designer</span>
         </div>
       </div>
-      <p class="dialog-copy">Your profile is currently local to this workspace. Account management can be connected when authentication is enabled.</p>
+      <p class="mt-3 text-xs leading-6 text-muted">Your profile is currently local to this workspace. Account management can be connected when authentication is enabled.</p>
     </ng-container>
 
     <ng-container *ngIf="dialog() === 'workspace'">
-      <button type="button" class="workspace-option workspace-option--active" (click)="closeDialog()">
-        <span class="workspace-avatar">M</span>
-        <span><strong>Mostafa's team</strong><small>Personal workspace</small></span>
-        <span class="workspace-check">✓</span>
+      <button type="button" class="mt-5 flex w-full items-center gap-3 rounded-xl border border-purple-light bg-purple/[8%] p-3 text-left text-ink" (click)="closeDialog()">
+        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-[10px] bg-gradient-to-br from-[#f09c8d] to-[80%] to-purple text-[11px] font-bold text-white">M</span>
+        <span class="grid min-w-0 flex-1 gap-1"><strong>Mostafa's team</strong><small class="text-[10px] text-muted">Personal workspace</small></span>
+        <svg class="h-4 w-4 text-purple-light" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <p class="dialog-copy">Workspace switching is ready for additional teams when they are added to your account.</p>
+      <p class="mt-3 text-xs leading-6 text-muted">Workspace switching is ready for additional teams when they are added to your account.</p>
     </ng-container>
   </section>
 </div>
 
-<div class="dialog-backdrop" *ngIf="todoToDelete()" (click)="todoToDelete.set(null)">
-  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="delete-dialog-title" (click)="$event.stopPropagation()">
-    <div class="dialog-header">
+<div class="fixed inset-0 z-[80] grid place-items-center overflow-y-auto bg-black/65 p-5 backdrop-blur-sm" *ngIf="todoToDelete()" (click)="todoToDelete.set(null)">
+  <section class="w-full max-w-[480px] rounded-2xl border border-line bg-[#1b1b2a] p-5 shadow-[0_22px_70px_rgb(0_0_0_/_45%)] sm:p-6" role="dialog" aria-modal="true" aria-labelledby="delete-dialog-title" (click)="$event.stopPropagation()">
+    <div class="flex items-start justify-between gap-4">
       <div>
-        <span class="section-overline">Task action</span>
-        <h2 id="delete-dialog-title">Delete this task?</h2>
+        <span class="mb-1.5 block text-[10px] font-bold uppercase tracking-[.08em] text-subtle">Task action</span>
+        <h2 class="mt-1 font-display text-xl font-semibold tracking-[-.5px]" id="delete-dialog-title">Delete this task?</h2>
       </div>
-      <button type="button" class="dialog-close" aria-label="Close" (click)="todoToDelete.set(null)">×</button>
+      <button type="button" class="rounded-lg bg-transparent p-2 text-muted hover:bg-white/5 hover:text-ink" aria-label="Close" (click)="todoToDelete.set(null)"><svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" stroke-linecap="round"/></svg></button>
     </div>
-    <p class="dialog-copy">“{{ todoToDelete()?.title }}” will be removed from your task list. This cannot be undone.</p>
-    <div class="dialog-actions">
-      <button type="button" class="secondary-button" (click)="todoToDelete.set(null)">Keep task</button>
-      <button type="button" class="danger-button" (click)="confirmDelete()">Delete task</button>
+    <p class="mt-3 text-xs leading-6 text-muted">“{{ todoToDelete()?.title }}” will be removed from your task list. This cannot be undone.</p>
+    <div class="mt-6 flex justify-end gap-2">
+      <button type="button" class="mt-[15px] inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#29283a] px-3 py-[9px] text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e]" (click)="todoToDelete.set(null)">Keep task</button>
+      <button type="button" class="inline-flex items-center justify-center rounded-[10px] bg-[#f26f68] px-4 py-3 text-xs font-semibold text-white hover:bg-[#ff837b]" (click)="confirmDelete()">Delete task</button>
     </div>
   </section>
 </div>
