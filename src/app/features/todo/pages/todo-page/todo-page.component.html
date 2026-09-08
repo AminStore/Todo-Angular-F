@@ -111,6 +111,14 @@
             aria-label="Search tasks"
             autocomplete="off"
             class="hidden w-full min-w-0 border-0 bg-transparent text-[11px] text-ink outline-none placeholder:text-[#6f6f80] focus-visible:outline-none md:block">
+          <button
+            *ngIf="searchQuery()"
+            type="button"
+            class="hidden shrink-0 rounded-md p-0.5 text-muted transition-colors hover:bg-white/[8%] hover:text-ink md:block"
+            aria-label="Clear search"
+            (click)="$event.preventDefault(); searchQuery.set('')">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 8 8M14 6l-8 8" stroke-linecap="round"/></svg>
+          </button>
           <span class="hidden whitespace-nowrap text-[9px] text-[#6c6c7a] md:inline">⌘ K</span>
         </label>
         <button type="button" class="relative grid h-8 w-8 place-items-center rounded-[9px] bg-transparent font-semibold text-muted hover:bg-white/[6%] hover:text-ink min-[361px]:grid" aria-label="Notifications" (click)="openDialog('notifications')">
@@ -135,16 +143,30 @@
         </button>
       </section>
 
-      <form
+        <form
         *ngIf="showComposer()"
-        class="-mt-3 mb-[25px] flex items-center gap-[13px] rounded-[14px] border border-purple/[36%] bg-purple/[9%] px-[15px] py-[13px]"
+        class="-mt-3 mb-[25px] flex flex-col items-stretch gap-3 rounded-[14px] border border-purple/[36%] bg-purple/[9%] px-[15px] py-[13px] sm:flex-row sm:items-center"
         [formGroup]="todoForm"
         (ngSubmit)="addTodo()">
         <div class="flex min-w-0 flex-1 items-center gap-2.5">
           <span class="h-4 w-4 shrink-0 rounded-full border border-purple-light" aria-hidden="true"></span>
-          <input class="w-full border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-muted" formControlName="title" placeholder="What needs to be done?" autofocus>
+          <input class="w-full border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-muted" formControlName="title" placeholder="What needs to be done?" aria-label="Task title" autofocus>
         </div>
-        <span class="hidden text-[10px] text-subtle sm:inline">Press Enter to add</span>
+        <div class="flex flex-wrap items-center gap-2 sm:shrink-0">
+          <label class="flex items-center gap-1.5 rounded-lg border border-line bg-white/[3%] px-2.5 py-2 text-[10px] text-muted">
+            <span class="sr-only">Priority</span>
+            <select formControlName="priority" aria-label="Task priority" class="bg-transparent text-[10px] text-ink outline-none">
+              <option class="bg-[#1b1b2a]" value="Low">Low</option>
+              <option class="bg-[#1b1b2a]" value="Medium">Medium</option>
+              <option class="bg-[#1b1b2a]" value="High">High</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-1.5 rounded-lg border border-line bg-white/[3%] px-2.5 py-2 text-[10px] text-muted">
+            <span class="sr-only">Due date</span>
+            <input type="date" formControlName="dueDate" aria-label="Task due date" class="min-w-0 bg-transparent text-[10px] text-ink outline-none">
+          </label>
+        </div>
+        <span class="hidden text-[10px] text-subtle xl:inline">Press Enter to add</span>
         <button class="rounded-lg bg-purple px-[13px] py-2 text-[11px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-45" type="submit" [disabled]="todoForm.invalid">Add task</button>
       </form>
 
@@ -175,7 +197,7 @@
               <span class="-ml-[5px] grid h-[23px] w-[23px] place-items-center rounded-full border-2 border-[#222033] bg-gradient-to-br from-[#91d5ef] to-[#4b7ed5] text-[8px] font-bold text-white">A</span>
               <span class="-ml-[5px] grid h-[23px] w-[23px] place-items-center rounded-full border-2 border-[#222033] bg-[#3b394e] text-[8px] text-[#e0dded]">+3</span>
             </div>
-            <span class="text-right text-[10px] text-[#aaa7ba]">Due in 12 days <svg class="ml-1 inline-block h-3.5 w-3.5 align-[-3px] text-purple-light" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+             <span class="text-right text-[10px] text-[#aaa7ba]">{{ nextDueLabel() }} <svg class="ml-1 inline-block h-3.5 w-3.5 align-[-3px] text-purple-light" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
         </article>
 
@@ -193,8 +215,8 @@
             <div class="grid gap-[3px]"><strong class="font-display text-lg font-semibold leading-none sm:text-xl">{{ todos().length }}</strong><span class="overflow-hidden truncate text-[9px] text-subtle">Total tasks</span></div>
           </div>
           <div class="flex h-[74px] max-w-[420px] items-end justify-between border-b border-line px-[5px]" aria-label="Weekly task activity">
-            <div class="grid h-full justify-items-center gap-[7px] text-[9px] text-subtle" *ngFor="let day of weekDays" [class.font-semibold]="day.today" [class.text-[#c6c0ff]]="day.today">
-              <div class="flex h-[54px] items-end"><span class="min-h-1.5 w-[9px] rounded-[5px] bg-[#4a495c]" [class.bg-gradient-to-b]="day.today" [class.from-[#bcb6ff]]="day.today" [class.to-[#7165f2]]="day.today" [class.shadow-[0_4px_12px_rgb(117_104_246_/_30%)]]="day.today" [style.height.%]="day.value"></span></div>
+             <div class="grid h-full justify-items-center gap-[7px] text-[9px] text-subtle" *ngFor="let day of weekDays()" [class.font-semibold]="day.today" [class.text-[#c6c0ff]]="day.today" [attr.aria-label]="day.label + ': ' + day.count + ' tasks'">
+             <div class="flex h-[54px] items-end"><span class="min-h-1.5 w-[9px] rounded-[5px] bg-[#4a495c]" [class.bg-gradient-to-b]="day.today" [class.from-[#bcb6ff]]="day.today" [class.to-[#7165f2]]="day.today" [class.shadow-[0_4px_12px_rgb(117_104_246_/_30%)]]="day.today" [style.height.%]="day.value"></span></div>
               <span>{{ day.label }}</span>
             </div>
           </div>
@@ -356,8 +378,8 @@
           <ng-template #emptyTasks>
             <div class="grid justify-items-center px-5 py-[43px] text-center">
               <div class="mb-3 grid h-[38px] w-[38px] place-items-center rounded-xl bg-purple/[13%] text-purple-light"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-              <h3 class="text-sm">{{ searchQuery() ? 'No matching tasks' : 'Nothing here yet' }}</h3>
-              <p class="mt-1.5 text-[11px] text-subtle">{{ searchQuery() ? 'Try a different search term.' : 'Add your first task to start making progress.' }}</p>
+               <h3 class="text-sm">{{ emptyTasksTitle() }}</h3>
+               <p class="mt-1.5 text-[11px] text-subtle">{{ emptyTasksMessage() }}</p>
               <button type="button" class="mt-[15px] inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#29283a] px-3 py-[9px] text-[10px] font-semibold text-[#c0baff] hover:bg-[#37354e]" (click)="showComposer.set(true)">Create a task</button>
             </div>
           </ng-template>
