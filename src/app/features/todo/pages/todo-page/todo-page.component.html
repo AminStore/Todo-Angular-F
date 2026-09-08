@@ -263,29 +263,35 @@
             <button
               type="button"
               role="tab"
+               class="inline-flex min-h-7 flex-1 items-center justify-center rounded-[7px] px-[5px] py-[7px] text-[9px] text-subtle transition-colors duration-200 hover:bg-white/[6%] hover:text-ink focus-visible:bg-[#2b2a3a] focus-visible:text-[#d2cdff] sm:flex-none sm:px-[9px] sm:text-[10px]"
               [attr.aria-selected]="filter() === 'all'"
               [class.bg-[#2b2a3a]]="filter() === 'all'"
               [class.text-[#d2cdff]]="filter() === 'all'"
+               [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'all'"
               (click)="setFilter('all')">
-              <span class="block whitespace-nowrap rounded-md px-[5px] py-[7px] text-[9px] text-subtle sm:px-[9px] sm:text-[10px]" [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'all'">All <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'all'">{{ todos().length }}</span></span>
+               <span class="whitespace-nowrap">All <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'all'">{{ todos().length }}</span></span>
             </button>
             <button
               type="button"
               role="tab"
+               class="inline-flex min-h-7 flex-1 items-center justify-center rounded-[7px] px-[5px] py-[7px] text-[9px] text-subtle transition-colors duration-200 hover:bg-white/[6%] hover:text-ink focus-visible:bg-[#2b2a3a] focus-visible:text-[#d2cdff] sm:flex-none sm:px-[9px] sm:text-[10px]"
               [attr.aria-selected]="filter() === 'active'"
               [class.bg-[#2b2a3a]]="filter() === 'active'"
               [class.text-[#d2cdff]]="filter() === 'active'"
+               [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'active'"
               (click)="setFilter('active')">
-              <span class="block whitespace-nowrap rounded-md px-[5px] py-[7px] text-[9px] text-subtle sm:px-[9px] sm:text-[10px]" [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'active'">In progress <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'active'">{{ activeCount() }}</span></span>
+               <span class="whitespace-nowrap">In progress <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'active'">{{ activeCount() }}</span></span>
             </button>
             <button
               type="button"
               role="tab"
+               class="inline-flex min-h-7 flex-1 items-center justify-center rounded-[7px] px-[5px] py-[7px] text-[9px] text-subtle transition-colors duration-200 hover:bg-white/[6%] hover:text-ink focus-visible:bg-[#2b2a3a] focus-visible:text-[#d2cdff] sm:flex-none sm:px-[9px] sm:text-[10px]"
               [attr.aria-selected]="filter() === 'completed'"
               [class.bg-[#2b2a3a]]="filter() === 'completed'"
               [class.text-[#d2cdff]]="filter() === 'completed'"
+               [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'completed'"
               (click)="setFilter('completed')">
-              <span class="block whitespace-nowrap rounded-md px-[5px] py-[7px] text-[9px] text-subtle sm:px-[9px] sm:text-[10px]" [class.shadow-[0_2px_7px_rgb(0_0_0_/_14%)]]="filter() === 'completed'">Completed <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'completed'">{{ completedCount() }}</span></span>
+               <span class="whitespace-nowrap">Completed <span class="ml-[3px] text-[#5f5f70]" [class.text-purple-light]="filter() === 'completed'">{{ completedCount() }}</span></span>
             </button>
           </div>
         </div>
